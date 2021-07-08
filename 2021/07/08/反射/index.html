@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2021 | xing</title>
+  <title>反射 | xing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="xing">
-<meta property="og:url" content="http://yoursite.com/archives/2021/index.html">
+  <meta name="description" content="java中反射的使用方法1，获取类的字节码（编译后类的class信息） 通过getClass()方法获取12Person person &#x3D; new Person();Class personClass &#x3D; person.getClass(); 通过类名.class获取  1Class personClass1 &#x3D; Person.class;   通过Class.forName()获取1final">
+<meta property="og:type" content="article">
+<meta property="og:title" content="反射">
+<meta property="og:url" content="http://yoursite.com/2021/07/08/%E5%8F%8D%E5%B0%84/index.html">
 <meta property="og:site_name" content="xing">
+<meta property="og:description" content="java中反射的使用方法1，获取类的字节码（编译后类的class信息） 通过getClass()方法获取12Person person &#x3D; new Person();Class personClass &#x3D; person.getClass(); 通过类名.class获取  1Class personClass1 &#x3D; Person.class;   通过Class.forName()获取1final">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-07-08T14:46:50.000Z">
+<meta property="article:modified_time" content="2021-07-08T15:20:46.049Z">
 <meta property="article:author" content="xing">
+<meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="xing" type="application/atom+xml">
@@ -162,36 +167,88 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-反射" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      反射
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/07/08/%E5%8F%8D%E5%B0%84/" class="archive-article-date">
+
+        
+        <a href="/2021/07/08/%E5%8F%8D%E5%B0%84/" class="archive-article-date">
   	<time datetime="2021-07-08T14:46:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-08</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/07/08/%E5%8F%8D%E5%B0%84/">反射</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="java中反射的使用方法"><a href="#java中反射的使用方法" class="headerlink" title="java中反射的使用方法"></a>java中反射的使用方法</h1><h2 id="1，获取类的字节码（编译后类的class信息）"><a href="#1，获取类的字节码（编译后类的class信息）" class="headerlink" title="1，获取类的字节码（编译后类的class信息）"></a>1，获取类的字节码（编译后类的class信息）</h2><ul>
+<li>通过getClass()方法获取<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Person person = <span class="keyword">new</span> Person();</span><br><span class="line">Class personClass = person.getClass();</span><br></pre></td></tr></table></figure></li>
+<li>通过类名.class获取</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class personClass1 = Person<span class="class">.<span class="keyword">class</span></span>;</span><br></pre></td></tr></table></figure>
 
-        <div class="article-info info-on-right">
-          
+<ul>
+<li>通过Class.forName()获取<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> Class&lt;?&gt; aClass = Class.forName(<span class="string">"com.xing.refection.Person.java"</span>);</span><br></pre></td></tr></table></figure></li>
+<li>通过类加载器获取<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ClassLoader classLoader = RefectTest<span class="class">.<span class="keyword">class</span>.<span class="title">getClassLoader</span>()</span>;</span><br><span class="line">Class&lt;?&gt; aClass1 = classLoader.loadClass(<span class="string">"com.xing.refection.Person.java"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="2-通过class信息获取构造器，创建对象"><a href="#2-通过class信息获取构造器，创建对象" class="headerlink" title="2,通过class信息获取构造器，创建对象"></a>2,通过class信息获取构造器，创建对象</h2></li>
+</ul>
+<ul>
+<li><p>获取所有的public修饰的构造器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Constructor&lt;?&gt;[] constructors &#x3D; aClass.getConstructors();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取所有的构造器,包括但不限于私有构造器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Constructor&lt;?&gt;[] declaredConstructors &#x3D; aClass.getDeclaredConstructors();</span><br></pre></td></tr></table></figure></li>
+<li><p>获取指定参数的public构造器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Constructor&lt;?&gt; constructor &#x3D; aClass.getConstructor(Double.class, String.class);</span><br><span class="line">final Object o &#x3D; constructor.newInstance(0.25, &quot;23423&quot;);</span><br></pre></td></tr></table></figure></li>
+<li><p>获取指定参数的任何构造器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Constructor&lt;?&gt; declaredConstructor &#x3D; aClass.getDeclaredConstructor(Integer.class, double.class);</span><br><span class="line">&#x2F;&#x2F;忽略权限检查</span><br><span class="line">declaredConstructor.setAccessible(true);</span><br><span class="line">&#x2F;&#x2F;创建构造器的对象</span><br><span class="line">Object o1 &#x3D; declaredConstructor.newInstance(22, 50.2);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="3-获取属性"><a href="#3-获取属性" class="headerlink" title="3,获取属性"></a>3,获取属性</h2><p>public 属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Field name &#x3D; aClass.getField(&quot;score&quot;);</span><br><span class="line">&#x2F;&#x2F;获取属性名</span><br><span class="line">name.getName();</span><br><span class="line">&#x2F;&#x2F;获取属性类型</span><br><span class="line">name.getType();</span><br><span class="line">&#x2F;&#x2F;获取属性修饰符</span><br><span class="line">Modifier.toString(name.getModifiers());</span><br><span class="line">Object instance &#x3D; aClass.newInstance();</span><br><span class="line">&#x2F;&#x2F;设置属性值</span><br><span class="line">name.set(instance,45);</span><br><span class="line">&#x2F;&#x2F;获取属性值</span><br><span class="line">name.get(instance);</span><br></pre></td></tr></table></figure>
+
+<p>所有属性，包括private，默认，protect，public</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">        Field name &#x3D; aClass.getDeclaredField(&quot;sno&quot;);</span><br><span class="line">        &#x2F;&#x2F;获取属性名</span><br><span class="line">        name.getName();</span><br><span class="line">        &#x2F;&#x2F;获取属性类型</span><br><span class="line">        name.getType();</span><br><span class="line">        &#x2F;&#x2F;获取属性修饰符</span><br><span class="line">        Modifier.toString(name.getModifiers());</span><br><span class="line">        Object instance &#x3D; aClass.newInstance();</span><br><span class="line">        &#x2F;&#x2F;设置属性值</span><br><span class="line">&#x2F;&#x2F;私有属性不能直接set        name.set(instance,45);</span><br><span class="line">        &#x2F;&#x2F;获取属性值</span><br><span class="line">&#x2F;&#x2F;私有属性不能直接get        name.get(instance);</span><br></pre></td></tr></table></figure>
+<h2 id="4-获取方法"><a href="#4-获取方法" class="headerlink" title="4,获取方法"></a>4,获取方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Object instance &#x3D; aClass.newInstance();</span><br><span class="line">&#x2F;&#x2F;获取无参方法</span><br><span class="line">Method getName &#x3D; aClass.getMethod(&quot;getName&quot;);</span><br><span class="line">Object invoke &#x3D; getName.invoke(instance);</span><br><span class="line">&#x2F;&#x2F;获取指定参数方法</span><br><span class="line">Method getName1 &#x3D; aClass.getMethod(&quot;getName&quot;, int.class, int.class);</span><br><span class="line">Object invoke1 &#x3D; getName1.invoke(instance, 1, 2);</span><br><span class="line">&#x2F;&#x2F;获取方法名</span><br><span class="line">getName1.getName();</span><br><span class="line">&#x2F;&#x2F;获取返回值类型</span><br><span class="line">getName1.getReturnType();</span><br><span class="line">&#x2F;&#x2F;获取修饰符</span><br><span class="line">Modifier.toString(getName1.getModifiers());</span><br></pre></td></tr></table></figure>
+<h3 id="4-1-获取方法上的注解"><a href="#4-1-获取方法上的注解" class="headerlink" title="4.1 获取方法上的注解"></a>4.1 获取方法上的注解</h3><p>注：只能获取Retention.RUNTIME类型的注解</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Annotation[] annotations &#x3D; getName1.getAnnotations();</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-获取类实现的接口，父类，包"><a href="#5-获取类实现的接口，父类，包" class="headerlink" title="5,获取类实现的接口，父类，包"></a>5,获取类实现的接口，父类，包</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;获取接口</span><br><span class="line">Class&lt;?&gt;[] interfaces &#x3D; aClass.getInterfaces();</span><br><span class="line">&#x2F;&#x2F;获取父类</span><br><span class="line">Class&lt;?&gt; superclass &#x3D; aClass.getSuperclass();</span><br><span class="line">&#x2F;&#x2F;获取包</span><br><span class="line">Package aPackage &#x3D; aClass.getPackage();</span><br></pre></td></tr></table></figure>
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -203,95 +260,106 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2021/07/08/%E5%8F%8D%E5%B0%84/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/07/08/%E6%B3%A8%E8%A7%A3/" class="archive-article-date">
-  	<time datetime="2021-07-08T13:55:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-08</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2021/07/08/%E6%B3%A8%E8%A7%A3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">注解</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/07/08/%E6%B3%A8%E8%A7%A3/">注解</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/07/08/git%E5%91%BD%E4%BB%A4/" class="archive-article-date">
-  	<time datetime="2021-07-08T08:14:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/07/08/git%E5%91%BD%E4%BB%A4/">git命令</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">git</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -314,8 +382,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
