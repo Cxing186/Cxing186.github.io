@@ -8,12 +8,12 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>熔断限流 | xing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="服务容错方案 ##服务雪崩微服务架构中，系统会被拆分成很多个服务小单元，相互之间通过http或者rpc远程调用，流程图如下: 1234A--&gt;BC--&gt;DB--&gt;ED--&gt;E 当服务提供者E出现问题，服务响应变得非常慢，会导致依赖于E的服务B,D出现请求堆积,导致服务B和D也不可用  以 SpringMVC 提供 API 接口举例子，因为 Tomcat 的线程池是有限的，如">
+  <meta name="description" content="服务容错方案 ##服务雪崩微服务架构中，系统会被拆分成很多个服务小单元，相互之间通过http或者rpc远程调用，流程图如下:">
 <meta property="og:type" content="article">
 <meta property="og:title" content="熔断限流">
 <meta property="og:url" content="http://yoursite.com/2021/07/09/%E7%86%94%E6%96%AD%E9%99%90%E6%B5%81/index.html">
 <meta property="og:site_name" content="xing">
-<meta property="og:description" content="服务容错方案 ##服务雪崩微服务架构中，系统会被拆分成很多个服务小单元，相互之间通过http或者rpc远程调用，流程图如下: 1234A--&gt;BC--&gt;DB--&gt;ED--&gt;E 当服务提供者E出现问题，服务响应变得非常慢，会导致依赖于E的服务B,D出现请求堆积,导致服务B和D也不可用  以 SpringMVC 提供 API 接口举例子，因为 Tomcat 的线程池是有限的，如">
+<meta property="og:description" content="服务容错方案 ##服务雪崩微服务架构中，系统会被拆分成很多个服务小单元，相互之间通过http或者rpc远程调用，流程图如下:">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://images0.cnblogs.com/blog/522490/201411/081226107372877.png">
 <meta property="og:image" content="https://i.loli.net/2020/10/22/AoF3swDmrd6Yhb7.jpg">
@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://i.loli.net/2020/11/26/igzbwCvqNIjpHhV.png">
 <meta property="og:image" content="https://i.loli.net/2020/11/26/9y5veVoDHXlOwbU.png">
 <meta property="article:published_time" content="2021-07-09T03:37:33.000Z">
-<meta property="article:modified_time" content="2021-07-09T03:38:17.048Z">
+<meta property="article:modified_time" content="2021-07-09T03:47:03.716Z">
 <meta property="article:author" content="xing">
 <meta property="article:tag" content="distributed">
 <meta name="twitter:card" content="summary">
@@ -55,7 +55,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/img/iron.png" class="js-avatar">
+			<img src="/img/ironman.jpg" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">xing</a></h1>
@@ -119,7 +119,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="/img/iron.png" class="js-avatar">
+				<img src="/img/ironman.jpg" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">xing</h1>
@@ -202,13 +202,14 @@
       
         <h1 id="服务容错方案"><a href="#服务容错方案" class="headerlink" title="服务容错方案"></a>服务容错方案</h1><hr>
 <p>##服务雪崩<br>微服务架构中，系统会被拆分成很多个服务小单元，相互之间通过http或者rpc远程调用，流程图如下:</p>
+<a id="more"></a>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A--&gt;B</span><br><span class="line">C--&gt;D</span><br><span class="line">B--&gt;E</span><br><span class="line">D--&gt;E</span><br></pre></td></tr></table></figure>
 <p>当服务提供者E出现问题，服务响应变得非常慢，会导致依赖于E的服务B,D出现请求堆积,导致服务B和D也不可用</p>
 <blockquote>
 <p>以 SpringMVC 提供 API 接口举例子，因为 Tomcat 的线程池是有限的，如果个别请求处理很慢，会逐步占用到整个线程池，导致后续其它请求无法被处理</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A--&gt;|refuse|B</span><br><span class="line">C--&gt;|refuse|D</span><br><span class="line">B--&gt;|slow|E</span><br><span class="line">D--&gt;|slow|E</span><br></pre></td></tr></table></figure>
-<hr>
 <p>##服务容错<br>针对服务雪崩的情况，解决方案很“简单”，尽量不要去调用哪个“故障服务”，避免被拖垮，避免进一步压垮下游服务，一般常用的手段有<strong>限流</strong>和<strong>降级</strong></p>
 <ul>
 <li><strong>限流</strong><ul>
@@ -692,11 +693,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">git</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color4">git</a>
               </li>
              
               <li class="article-tag-list-item">

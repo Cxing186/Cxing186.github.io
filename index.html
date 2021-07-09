@@ -43,7 +43,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/img/iron.png" class="js-avatar">
+			<img src="/img/ironman.jpg" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">xing</a></h1>
@@ -107,7 +107,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="/img/iron.png" class="js-avatar">
+				<img src="/img/ironman.jpg" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">xing</h1>
@@ -192,265 +192,9 @@
       
         <h1 id="服务容错方案"><a href="#服务容错方案" class="headerlink" title="服务容错方案"></a>服务容错方案</h1><hr>
 <p>##服务雪崩<br>微服务架构中，系统会被拆分成很多个服务小单元，相互之间通过http或者rpc远程调用，流程图如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A--&gt;B</span><br><span class="line">C--&gt;D</span><br><span class="line">B--&gt;E</span><br><span class="line">D--&gt;E</span><br></pre></td></tr></table></figure>
-<p>当服务提供者E出现问题，服务响应变得非常慢，会导致依赖于E的服务B,D出现请求堆积,导致服务B和D也不可用</p>
-<blockquote>
-<p>以 SpringMVC 提供 API 接口举例子，因为 Tomcat 的线程池是有限的，如果个别请求处理很慢，会逐步占用到整个线程池，导致后续其它请求无法被处理</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A--&gt;|refuse|B</span><br><span class="line">C--&gt;|refuse|D</span><br><span class="line">B--&gt;|slow|E</span><br><span class="line">D--&gt;|slow|E</span><br></pre></td></tr></table></figure>
-<hr>
-<p>##服务容错<br>针对服务雪崩的情况，解决方案很“简单”，尽量不要去调用哪个“故障服务”，避免被拖垮，避免进一步压垮下游服务，一般常用的手段有<strong>限流</strong>和<strong>降级</strong></p>
-<ul>
-<li><strong>限流</strong><ul>
-<li>通过限制调用服务的频率，避免频繁调用故障服务，导致请求任务积压而自身雪崩 </li>
-</ul>
-</li>
-<li><strong>降级</strong><ul>
-<li>通过关闭对故障服务的调用，停止调用故障服务，从而避免服务雪崩。当然，关闭的前提是，不调用故障服务的情况下，业务逻辑依然可以走下去，或者业务数据的完整性不会被破坏。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<hr>
-<hr>
-<h2 id="Hystrix降级处理"><a href="#Hystrix降级处理" class="headerlink" title="Hystrix降级处理"></a>Hystrix降级处理</h2><p>Hystrix是一个延迟和容错库，旨在隔离对远程系统，服务和第三方库的访问点，停止级联故障，并在不可避免发生故障的复杂分布式系统中实现弹性。</p>
-<blockquote>
-<p>Hystrix 源于 Netflix API 团队启动的弹性工程项目，在此期间，Hystrix 得到了不断发展，并逐渐成熟。现在，在 Netflix 网站中，每天有数十亿的独立线程和信号通过 Hystrix 进行调用，Hystrix 的运行时间和弹性也得到了显著的改善。</p>
-</blockquote>
-<blockquote>
-<p>Netflix 称，在分布式环境中，不可避免会造成一些服务的失败。Hystrix 库旨在控制分布式服务中提供更大容限和服务失败之间的相互关系。Hystrix 通过隔离访问远程系统、服务和第三方库的点，阻止级联故障，从而使复杂的分布式系统更具弹性。</p>
-</blockquote>
-<p><strong>Hystrix 比较重要的三个特性：1）Fallback 服务降级；2）断路器机制；3）资源隔离。</strong></p>
-<p>####1. fallback服务降级</p>
-<ul>
-<li>当服务调用失败时，我们可以通过hystrix实现服务降级<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/get_user"</span>)</span><br><span class="line"><span class="meta">@HystrixCommand</span>(fallbackMethod = <span class="string">"getUserFallback"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getUser</span><span class="params">(@RequestParam(<span class="string">"id"</span>)</span> Integer id) </span>&#123;</span><br><span class="line">    logger.info(<span class="string">"[getUser][准备调用 user-service 获取用户(&#123;&#125;)详情]"</span>, id);</span><br><span class="line">    <span class="keyword">return</span> restTemplate.getForEntity(<span class="string">"http://127.0.0.1:18080/user/get?id="</span> + id, String<span class="class">.<span class="keyword">class</span>).<span class="title">getBody</span>()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getUserFallback</span><span class="params">(Integer id, Throwable throwable)</span> </span>&#123;</span><br><span class="line">    logger.info(<span class="string">"[getUserFallback][id(&#123;&#125;) exception(&#123;&#125;)]"</span>, id, ExceptionUtils.getRootCauseMessage(throwable));</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"mock:User:"</span> + id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-####2. 断路器机制</li>
-<li>Hystrix内置断路器实现，一共有三种状态：<ul>
-<li>CLOSED： 关闭</li>
-<li>OPEN： 打开</li>
-<li>HALF_OPEN： 半开<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">OPEN--&gt;|attempExecution|HALF_OPEN</span><br><span class="line">HALF_OPEN--&gt;|markSuccess|CLOSED</span><br><span class="line">CLOSED--&gt;|subscribeToStream|OPEN</span><br><span class="line">HALF_OPEN--&gt;|markNonSuccess|OPEN</span><br></pre></td></tr></table></figure>
-####3. 资源隔离<ul>
-<li>Hystrix通过<strong>线程池</strong>和<strong>信号量</strong>两种模式来实现隔离</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>线程池模式<br>默认情况下,Hystix采用线程池模式来实现隔离。<br>针对调用的每一个服务，我们给其单独分配一个线程池。例如，产品服务的调用分配在A线程池，用户服务的调用分配在B线程池。这样隔离后，两个服务的调用不会相互影响。</li>
-<li>信号量模式<br>使用线程池模式隔离时，需要进行上下文的切换，带来一定的性能损耗。因此，如果对性能有较高的要求，且能够接受信号量模式不支持超时的情况，可以考虑采用信号量模式。</li>
-</ul>
-<hr>
-<hr>
-<hr>
-<p>##Resilience4j</p>
-<p>###概述<br>Resilience4j是一个轻量级的容错组件，其灵感来自于Hystrix,但主要为java8和函数式编程所设计</p>
-<h3 id="1-CircuitBreaker熔断器"><a href="#1-CircuitBreaker熔断器" class="headerlink" title="1. CircuitBreaker熔断器"></a>1. CircuitBreaker熔断器</h3><p>CircuitBreaker 一共有 CLOSED、OPEN、HALF_OPEN三种状态，通过状态机实现。</p>
-<ul>
-<li>当熔断器关闭(CLOSED)时，所有的请求都会通过熔断器。</li>
-<li>如果失败率超过设定的阈值，熔断器就会从关闭状态转换到打开(OPEN)状态，这时所有的请求都会被拒绝。</li>
-<li>当经过一段时间后，熔断器会从打开状态转换到半开(HALF_OPEN)状态，这时仅有一定数量的请求会被放入，并重新计算失败率。如果失败率超过阈值，则变为打开(OPEN)状态；如果失败率低于阈值，则变为关闭(CLOSE)状态。<br>####搭建circuitBreaker熔断器</li>
-</ul>
-<p>a. 引入pom依赖</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;io.github.resilience4j&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;resilience4j-spring-boot2&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.4.0&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
-
-<p>b. 配置application熔断器配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">resilience4j:</span><br><span class="line">  # Resilience4j 的熔断器配置项，对应 CircuitBreakerProperties 属性类</span><br><span class="line">  circuitbreaker:</span><br><span class="line">    instances:</span><br><span class="line">      backendA:</span><br><span class="line">        failure-rate-threshold: 50 # 熔断器关闭状态和半开状态使用的同一个失败率阈值，单位：百分比。默认为 50</span><br><span class="line">        ring-buffer-size-in-closed-state: 5 # 熔断器关闭状态的缓冲区大小，不会限制线程的并发量，在熔断器发生状态转换前所有请求都会调用后端服务。默认为 100</span><br><span class="line">        ring-buffer-size-in-half-open-state: 5 # 熔断器半开状态的缓冲区大小，会限制线程的并发量。例如，缓冲区为 10 则每次只会允许 10 个请求调用后端服务。默认为 10</span><br><span class="line">        wait-duration-in-open-state : 5000 # 熔断器从打开状态转变为半开状态等待的时间，单位：微秒</span><br><span class="line">        automatic-transition-from-open-to-half-open-enabled: true # 如果置为 true，当等待时间结束会自动由打开变为半开；若置为 false，则需要一个请求进入来触发熔断器状态转换。默认为 true</span><br><span class="line">        register-health-indicator: true # 是否注册到健康监测</span><br></pre></td></tr></table></figure>
-<p>c. 通过注解+AOP模式代码实现</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/get_user"</span>)</span><br><span class="line"><span class="meta">@CircuitBreaker</span>(name = <span class="string">"backendA"</span>, fallbackMethod = <span class="string">"getUserFallback"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getUser</span><span class="params">(@RequestParam(<span class="string">"id"</span>)</span> Integer id) </span>&#123;</span><br><span class="line">    logger.info(<span class="string">"[getUser][准备调用 user-service 获取用户(&#123;&#125;)详情]"</span>, id);</span><br><span class="line">    <span class="keyword">return</span> restTemplate.getForEntity(<span class="string">"http://127.0.0.1:18080/user/get?id="</span> + id, String<span class="class">.<span class="keyword">class</span>).<span class="title">getBody</span>()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getUserFallback</span><span class="params">(Integer id, Throwable throwable)</span> </span>&#123;</span><br><span class="line">    logger.info(<span class="string">"[getUserFallback][id(&#123;&#125;) exception(&#123;&#125;)]"</span>, id, throwable.getClass().getSimpleName());</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"mock:User:"</span> + id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="2-RateLimiter限流器"><a href="#2-RateLimiter限流器" class="headerlink" title="2. RateLimiter限流器"></a>2. RateLimiter限流器</h3><p>RateLimiter接口一共有两个实现类:</p>
-<ul>
-<li>AtomicRateLimiter：基于令牌桶限流算法实现限流。</li>
-<li><del>SemaphoreBasedRateLimiter：基于 Semaphore 实现限流。(信号量)</del><br>默认情况下，采用 AtomicRateLimiter 基于令牌桶限流算法实现限流。<blockquote>
-<p>令牌桶算法的原理是系统会以一个恒定的速度往桶里放入令牌，而如果请求需要被处理，则需要先从桶里获取一个令牌，当桶里没有令牌可取时，则拒绝服务。<br><img src="https://images0.cnblogs.com/blog/522490/201411/081226107372877.png" alt="compare"></p>
-</blockquote>
-<h4 id="如何使用RateLimiter限流器："><a href="#如何使用RateLimiter限流器：" class="headerlink" title="如何使用RateLimiter限流器："></a><strong>如何使用RateLimiter限流器：</strong></h4></li>
-</ul>
-<p>####1. 增加application.yml配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">resilience4j:</span><br><span class="line">  # Resilience4j 的限流器配置项，对应 RateLimiterProperties 属性类</span><br><span class="line">  ratelimiter:</span><br><span class="line">    instances:</span><br><span class="line">      backendB:</span><br><span class="line">        limit-for-period: 1 # 每个周期内，允许的请求数。默认为 50</span><br><span class="line">        limit-refresh-period: 10s # 每个周期的时长，单位：微秒。默认为 500</span><br><span class="line">        timeout-duration: 5s # 被限流时，阻塞等待的时长，单位：微秒。默认为 5s</span><br><span class="line">        register-health-indicator: true # 是否注册到健康监测</span><br></pre></td></tr></table></figure>
-<p>####2. 通过注解代码接入</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;&#x2F;get_user&quot;)</span><br><span class="line">@RateLimiter(name &#x3D; &quot;backendB&quot;, fallbackMethod &#x3D; &quot;getUserFallback&quot;)</span><br><span class="line">public String getUser(@RequestParam(&quot;id&quot;) Integer id) &#123;</span><br><span class="line">    return &quot;User:&quot; + id;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public String getUserFallback(Integer id, Throwable throwable) &#123;</span><br><span class="line">    logger.info(&quot;[getUserFallback][id(&#123;&#125;) exception(&#123;&#125;)]&quot;, id, throwable.getClass().getSimpleName());</span><br><span class="line">    return &quot;mock:User:&quot; + id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><strong>注意：</strong>@RateLimiter 注解的 fallbackMethod 属性对应的 fallback 方法，不仅仅处理被限流时抛出的 RequestNotPermitted 异常，也处理 #getUser(Integer id) 方法执行时的普通异常<br>另外，我们将 @RateLimiter 和 @CircuitBreaker 注解添加在相同方法上，进行组合使用，来实现限流和断路的作用。但是要注意，需要添加 resilience4j.circuitbreaker.instances.<instance_name>.ignoreExceptions=io.github.resilience4j.ratelimiter.RequestNotPermitted 配置项，忽略限流抛出的 RequestNotPermitted 异常，避免触发断路器的熔断</p>
-</blockquote>
-<p>###3. Bulkhead舱壁隔离<br>bulkhead指的是船舶中的舱壁，它将船体分隔为多个船舱，在船部分受损时可以避免沉船<br>在 Resilience4j 中，提供了基于 <strong>Semaphore 信号量</strong>和 <strong>ThreadPool 线程池</strong>两种 Bulkhead 实现，隔离不同种类的调用，并提供流控的能力，从而避免某类调用异常时而占用所有资源，导致影响整个系统。</p>
-<h4 id="信号量隔离"><a href="#信号量隔离" class="headerlink" title="信号量隔离"></a><strong>信号量隔离</strong></h4><p>a.增加application.yml相关配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">resilience4j:</span><br><span class="line">  # Resilience4j 的信号量 Bulkhead 配置项，对应 BulkheadConfigurationProperties 属性类</span><br><span class="line">  bulkhead:</span><br><span class="line">    instances:</span><br><span class="line">      backendC:</span><br><span class="line">        max-concurrent-calls: 1 # 并发调用数。默认为 25</span><br><span class="line">        max-wait-duration: 5s # 并发调用到达上限时，阻塞等待的时长，单位：微秒。默认为 0</span><br></pre></td></tr></table></figure>
-<p>b.代码实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;&#x2F;get_user&quot;)</span><br><span class="line">@Bulkhead(name &#x3D; &quot;backendC&quot;, fallbackMethod &#x3D; &quot;getUserFallback&quot;, type &#x3D; Bulkhead.Type.SEMAPHORE)</span><br><span class="line">public String getUser(@RequestParam(&quot;id&quot;) Integer id) throws InterruptedException &#123;</span><br><span class="line">    logger.info(&quot;[getUser][id(&#123;&#125;)]&quot;, id);</span><br><span class="line">    Thread.sleep(10 * 1000L); &#x2F;&#x2F; sleep 10 秒</span><br><span class="line">    return &quot;User:&quot; + id;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public String getUserFallback(Integer id, Throwable throwable) &#123;</span><br><span class="line">    logger.info(&quot;[getUserFallback][id(&#123;&#125;) exception(&#123;&#125;)]&quot;, id, throwable.getClass().getSimpleName());</span><br><span class="line">    return &quot;mock:User:&quot; + id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在请求被流控时，Resilience4j 不会执行 #getUser(Integer id) 方法，而是直接抛出 BulkheadFullException 异常，然后就进入 fallback 降级处理。</p>
-<blockquote>
-<p><strong>注意</strong>: 在请求被流控时，并不是直接失败抛出异常，而是阻塞等待最大 max-wait-duration 微秒，看看是否能够请求通过。</p>
-</blockquote>
-<h4 id="线程池隔离"><a href="#线程池隔离" class="headerlink" title="线程池隔离"></a><strong>线程池隔离</strong></h4><p>略<br>###4. Retry重试<br>a.设置application.yml</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">retry:</span><br><span class="line">  instances:</span><br><span class="line">    backendE:</span><br><span class="line">      max-retry-Attempts: 3 # 最大重试次数。默认为 3</span><br><span class="line">      wait-duration: 5s # 下次重试的间隔，单位：微秒。默认为 500 毫秒</span><br><span class="line">      retry-exceptions: # 需要重试的异常列表。默认为空</span><br><span class="line">      ingore-exceptions: # 需要忽略的异常列表。默认为空</span><br></pre></td></tr></table></figure>
-<p>b.代码添加注解实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;&#x2F;get_user&quot;)</span><br><span class="line">@Retry(name &#x3D; &quot;backendE&quot;, fallbackMethod &#x3D; &quot;getUserFallback&quot;)</span><br><span class="line">public String getUser(@RequestParam(&quot;id&quot;) Integer id) &#123;</span><br><span class="line">    logger.info(&quot;[getUser][准备调用 user-service 获取用户(&#123;&#125;)详情]&quot;, id);</span><br><span class="line">    return restTemplate.getForEntity(&quot;http:&#x2F;&#x2F;127.0.0.1:18080&#x2F;user&#x2F;get?id&#x3D;&quot; + id, String.class).getBody();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public String getUserFallback(Integer id, Throwable throwable) &#123;</span><br><span class="line">    logger.info(&quot;[getUserFallback][id(&#123;&#125;) exception(&#123;&#125;)]&quot;, id, throwable.getClass().getSimpleName());</span><br><span class="line">    return &quot;mock:User:&quot; + id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>在多次重试失败到达上限时，Resilience4j 会抛出 MaxRetriesExceeded 异常，然后就进入 fallback 降级处理</p>
-</blockquote>
-<p>###5. TimeLimiter 限时器<br>a.增加application.yml配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">resilience4j:</span><br><span class="line">  # Resilience4j 的超时限制器 TimeLimiter 配置项，对应 TimeLimiterProperties 属性类</span><br><span class="line">  timelimiter:</span><br><span class="line">    instances:</span><br><span class="line">      backendF:</span><br><span class="line">        timeout-duration: 1s # 等待超时时间，单位：微秒。默认为 1 秒</span><br><span class="line">        cancel-running-future: true # 当等待超时时，是否关闭取消线程。默认为 true</span><br><span class="line">        </span><br><span class="line">  # Resilience4j 的线程池 Bulkhead 配置项，对应 ThreadPoolBulkheadProperties 属性类</span><br><span class="line">  thread-pool-bulkhead:</span><br><span class="line">    instances:</span><br><span class="line">      backendD:</span><br><span class="line">        max-thread-pool-size: 1 # 线程池的最大大小。默认为 Runtime.getRuntime().availableProcessors()</span><br><span class="line">        core-thread-pool-size: 1 # 线程池的核心大小。默认为 Runtime.getRuntime().availableProcessors() - 1</span><br><span class="line">        queue-capacity: 200 # 线程池的队列大小。默认为 100</span><br><span class="line">        keep-alive-duration: 100s # 超过核心大小的线程，空闲存活时间。默认为 20 毫秒</span><br></pre></td></tr></table></figure>
-<p>b.代码实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;&#x2F;time-limiter-demo&quot;)</span><br><span class="line">public class TimeLimiterDemoController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private TimeLimiterService timeLimiterService;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;&#x2F;get_user&quot;)</span><br><span class="line">    public String getUser(@RequestParam(&quot;id&quot;) Integer id) throws ExecutionException, InterruptedException &#123;</span><br><span class="line">        return timeLimiterService.getUser0(id).get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Service</span><br><span class="line">    public static class TimeLimiterService &#123;</span><br><span class="line"></span><br><span class="line">        private Logger logger &#x3D; LoggerFactory.getLogger(TimeLimiterService.class);</span><br><span class="line"></span><br><span class="line">        @Bulkhead(name &#x3D; &quot;backendD&quot;, type &#x3D; Bulkhead.Type.THREADPOOL)</span><br><span class="line">        @TimeLimiter(name &#x3D; &quot;backendF&quot;, fallbackMethod &#x3D; &quot;getUserFallback&quot;)</span><br><span class="line">        public CompletableFuture&lt;String&gt; getUser0(Integer id) throws InterruptedException &#123;</span><br><span class="line">            logger.info(&quot;[getUser][id(&#123;&#125;)]&quot;, id);</span><br><span class="line">            Thread.sleep(10 * 1000L); &#x2F;&#x2F; sleep 10 秒</span><br><span class="line">            return CompletableFuture.completedFuture(&quot;User:&quot; + id);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public CompletableFuture&lt;String&gt; getUserFallback(Integer id, Throwable throwable) &#123;</span><br><span class="line">            logger.info(&quot;[getUserFallback][id(&#123;&#125;) exception(&#123;&#125;)]&quot;, id, throwable.getClass().getSimpleName());</span><br><span class="line">            return CompletableFuture.completedFuture(&quot;mock:User:&quot; + id);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>友情提示：因为 TimeLimiter 需要搭配线程池类型的 Bulkhead，所以这里添加了 resilience4j.thread-pool-bulkhead 配置项，因为 TimeLimiter 是基于线程池来实现超时限制的。</p>
-</blockquote>
-<p><strong>注意</strong>！！！方法的返回类型必须是 CompletableFuture 类型，包括 fallback 方法，否则会报异常，毕竟要提交线程池中执行。<br>在请求执行超时时，Resilience4j 会抛出 TimeoutException 异常，然后就进入 fallback 降级处理。</p>
-<p>###6. 执行顺序<br>Retry &gt; CircuitBreaker &gt; RateLimiter &gt; TimeLimiter &gt; Bulkhead<br>| 注解            |         切面         | 顺序                          |<br>| ————— | :——————: | —————————– |<br>| @Retry          |     RetryAspect      | Ordered.LOWEST_PRECEDENCE - 4 |<br>| @CircuitBreaker | CircuitBreakerAspect | Ordered.LOWEST_PRECEDENCE - 3 |<br>| @RateLimiter    |  RateLimiterAspect   | Ordered.LOWEST_PRECEDENCE - 2 |<br>| @TimeLimiter    |  TimeLimiterAspect   | Ordered.LOWEST_PRECEDENCE - 1 |<br>| @Bulkhead       |    BulkheadAspect    | Ordered.LOWEST_PRECEDENCE     |</p>
-<p>###7. 监控</p>
-<ul>
-<li>接入grafana,图形界面界面监控</li>
-</ul>
-<hr>
-<hr>
-<hr>
-<p>##Sentinel<br>###概述<br>Sentinel是什么?</p>
-<blockquote>
-<p>随着分布式系统变得越来越流行，服务之间的可靠性变得比以往任何时候都更加重要。Sentinel以“流”为切入点，并在流控制， 流量整形，电路中断和系统自适应保护等多个领域工作，以确保微服务的可靠性和弹性。</p>
-</blockquote>
-<p>Sentinel的特征：</p>
-<ul>
-<li><strong>丰富的应用场景</strong>：Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀（即突发流量控制在系统容量可以承受的范围）、消息削峰填谷、集群流量控制、实时熔断下游不可用应用等。</li>
-<li><strong>完备的实时监控</strong>：Sentinel 同时提供实时的监控功能。您可以在控制台中看到接入应用的单台机器秒级数据，甚至 500 台以下规模的集群的汇总运行情况。</li>
-<li><strong>广泛的开源生态</strong>：Sentinel 提供开箱即用的与其它开源框架/库的整合模块，例如与 Spring Cloud、Dubbo、gRPC 的整合。您只需要引入相应的依赖并进行简单的配置即可快速地接入 Sentinel。</li>
-<li><strong>完善的 SPI 扩展点</strong>：Sentinel 提供简单易用、完善的 SPI 扩展接口。您可以通过实现扩展接口来快速地定制逻辑。例如定制规则管理、适配动态数据源等。</li>
-</ul>
-<p>###组成</p>
-<ul>
-<li><strong>核心库（Java 客户端）</strong>：不依赖任何框架/库，能够运行于所有 Java 运行时环境，同时对 Dubbo / Spring Cloud 等框架也有较好的支持。</li>
-<li><strong>控制台（Dashboard）</strong>：基于 Spring Boot 开发，打包后可以直接运行，不需要额外的 Tomcat 等应用容器。</li>
-</ul>
-<p>###控制台<br>①下载程序包: <a href="https://github.com/alibaba/Sentinel/releases" target="_blank" rel="noopener">https://github.com/alibaba/Sentinel/releases</a><br>②启动<br><code>nohup java -jar sentinel-dashboard-1.7.1.jar &amp;</code><br>可自定义启动参数：</p>
-<ul>
-<li>–server.port：自定义服务器端口。默认为 8080 端口。</li>
-<li>–auth.username 和 –auth.password：自定义账号和密码。默认为「sentinel / sentinel」。</li>
-<li>–logging.file：自定义日志文件。默认为 ${user.home}/logs/csp/sentinel-dashboard.log。<br>查看nohup.out日志检查服务是否启动</li>
-</ul>
-<p>③登陆UI界面<br><a href="http://127.0.0.1:8080/" target="_blank" rel="noopener">http://127.0.0.1:8080/</a><br><img src="https://i.loli.net/2020/10/22/AoF3swDmrd6Yhb7.jpg" alt="sentinel.jpg"></p>
-<p>###核心库</p>
-<p>####1. 流量控制<br>流量控制（flow control），其原理是监控应用流量的 QPS 或并发线程数等指标，当达到指定的阈值时对流量进行控制，以避免被瞬时的流量高峰冲垮，从而保障应用的高可用性。</p>
-<p>一条限流规则主要由下面几个因素组成，我们可以组合这些元素来实现不同的限流效果：</p>
-<ul>
-<li>resource：资源名，即限流规则的作用对象</li>
-<li>count: 限流阈值</li>
-<li>grade: 限流阈值类型（QPS 或并发线程数）</li>
-<li>limitApp: 流控针对的调用来源，若为 default 则不区分调用来源</li>
-<li>strategy: 调用关系限流策略</li>
-<li>controlBehavior: 流量控制效果（直接拒绝、Warm Up、匀速排队）</li>
-</ul>
-<p>控制台配置界面：<br><img src="https://i.loli.net/2020/11/26/am843krDiNYZGUw.png" alt="sentinelflowcontrol.png"><br>####2. 熔断降级<br>Sentinel 提供以下几种熔断策略：</p>
-<ul>
-<li><strong>慢调用比例 (SLOW_REQUEST_RATIO)</strong>：选择以慢调用比例作为阈值，需要设置允许的慢调用RT（即最大的响应时间），请求的响应时间大于该值则统计为慢调用。当单位统计时长（statIntervalMs）内请求数目大于设置的最小请求数目，并且慢调用的比例大于阈值，则接下来的熔断时长内请求会自动被熔断。经过熔断时长后熔断器会进入探测恢复状态（HALF-OPEN状态），若接下来的一个请求响应时间小于设置的慢调用RT则结束熔断，若大于设置的慢调用 RT 则会再次被熔断。</li>
-<li><strong>异常比例 (ERROR_RATIO)</strong>：当单位统计时长（statIntervalMs）内请求数目大于设置的最小请求数目，并且异常的比例大于阈值，则接下来的熔断时长内请求会自动被熔断。经过熔断时长后熔断器会进入探测恢复状态（HALF-OPEN 状态），若接下来的一个请求成功完成（没有错误）则结束熔断，否则会再次被熔断。异常比率的阈值范围是 [0.0, 1.0]，代表 0% - 100%。</li>
-<li><strong>异常数 (ERROR_COUNT)</strong>：当单位统计时长内的异常数目超过阈值之后会自动进行熔断。经过熔断时长后熔断器会进入探测恢复状态（HALF-OPEN状态），若接下来的一个请求成功完成（没有错误）则结束熔断，否则会再次被熔断</li>
-</ul>
-<p>熔断规则说明：<br>| Field              |                             说明                             |   默认值   |<br>| —————— | :———————————————————-: | :——–: |<br>| resource           |                   资源名，即规则的作用对象                   |            |<br>| grade              |         熔断策略，支持慢调用比例/异常比例/异常数策略         | 慢调用比例 |<br>| count              | 慢调用比例模式下为慢调用临界 RT（超出该值计为慢调用）；异常比例/异常数模式下为对应的阈值 |            |<br>| timeWindow         |                      熔断时长，单位为 s                      |            |<br>| minRequestAmount   | 熔断触发的最小请求数，请求数小于该值时即使异常比率超出阈值也不会熔断（1.7.0 引入） |     5      |<br>| statIntervalMs     |  统计时长（单位为 ms），如 60*1000 代表分钟级（1.8.0 引入）  |  1000 ms   |<br>| slowRatioThreshold |      慢调用比例阈值，仅慢调用比例模式有效（1.8.0 引入）      |            |</p>
-<p>控制台熔断配置界面：<br><img src="https://i.loli.net/2020/11/26/vWhKZDef5SJ7E93.png" alt="sentineldegrade.png"></p>
-<p>####3. 系统自适应限流<br>Sentinel 同时提供系统维度的自适应保护能力。防止雪崩，是系统防护中重要的一环。当系统负载较高的时候，如果还持续让请求进入，可能会导致系统崩溃，无法响应。在集群环境下，网络负载均衡会把本应这台机器承载的流量转发到其它的机器上去。如果这个时候其它的机器也处在一个边缘状态的时候，这个增加的流量就会导致这台机器也崩溃，最后导致整个集群不可用。<br>针对这个情况，Sentinel 提供了对应的保护机制，让系统的入口流量和系统的负载达到一个平衡，保证系统在能力范围之内处理最多的请求。</p>
-<p>系统保护规则是应用整体维度的，而不是资源维度的，并且仅对入口流量生效。入口流量指的是进入应用的流量（EntryType.IN），比如 Web 服务或 Dubbo 服务端接收的请求，都属于入口流量。</p>
-<p>系统规则支持以下的模式：</p>
-<ul>
-<li><strong>Load 自适应（仅对 Linux/Unix-like 机器生效）</strong>：系统的 load1 作为启发指标，进行自适应系统保护。当系统 load1 超过设定的启发值，且系统当前的并发线程数超过估算的系统容量时才会触发系统保护（BBR 阶段）。系统容量由系统的 maxQps * minRt 估算得出。设定参考值一般是 CPU cores * 2.5。</li>
-<li><strong>CPU usage（1.5.0+ 版本）</strong>：当系统 CPU 使用率超过阈值即触发系统保护（取值范围 0.0-1.0），比较灵敏。</li>
-<li><strong>平均 RT</strong>：当单台机器上所有入口流量的平均 RT 达到阈值即触发系统保护，单位是毫秒。</li>
-<li><strong>并发线程数</strong>：当单台机器上所有入口流量的并发线程数达到阈值即触发系统保护。</li>
-<li><strong>入口 QPS</strong>：当单台机器上所有入口流量的 QPS 达到阈值即触发系统保护。</li>
-</ul>
-<p>控制台配置界面：<br><img src="https://i.loli.net/2020/11/26/igzbwCvqNIjpHhV.png" alt="sentinelsystem.png"></p>
-<p>####4. 黑白名单控制<br>很多时候，我们需要根据调用来源来判断该次请求是否允许放行，这时候可以使用 Sentinel 的来源访问控制（黑白名单控制）的功能。来源访问控制根据资源的请求来源（origin）限制资源是否通过：</p>
-<ul>
-<li>若配置白名单则只有请求来源位于白名单内时才可通过；</li>
-<li>若配置黑名单则请求来源位于黑名单时不通过，其余的请求通过。</li>
-</ul>
-<p>eg:设置只有请求参数中user=test时才能通过</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">config.setOriginParser(new RequestOriginParser() &#123; &#x2F;&#x2F; 设置请求来源解析器。用于黑白名单控制功能。</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String parseOrigin(HttpServletRequest request) &#123;</span><br><span class="line">        &#x2F;&#x2F; &lt;X&gt; 从 Header 中，获得请求来源</span><br><span class="line">        String origin &#x3D; request.getParameter(&quot;user&quot;);</span><br><span class="line">        &#x2F;&#x2F; &lt;Y&gt; 如果为空，给一个默认的</span><br><span class="line">        if (StringUtils.isEmpty(origin)) &#123;</span><br><span class="line">            origin &#x3D; &quot;default&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        return origin;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>控制台设置：<br><img src="https://i.loli.net/2020/11/26/9y5veVoDHXlOwbU.png" alt="sentinelrule.png"><br>###规则管理和推送<br>| 推送模式  |                             说明                             |             优点             | 缺点                                                         |<br>| ——— | :———————————————————-: | :————————–: | ———————————————————— |<br>| 原始模式  | API 将规则推送至客户端并直接更新到内存中，扩展写数据源（WritableDataSource） |       简单，无任何依赖       | 不保证一致性；规则保存在内存中，重启即消失。严重不建议用于生产环境 |<br>| Pull 模式 | 扩展写数据源（WritableDataSource）， 客户端主动向某个规则管理中心定期轮询拉取规则，这个规则中心可以是 RDBMS、文件 等 | 简单，无任何依赖；规则持久化 | 不保证一致性；实时性不保证，拉取过于频繁也可能会有性能问题。 |<br>| Push 模式 | 扩展读数据源（ReadableDataSource），规则中心统一推送，客户端通过注册监听器的方式时刻监听变化，比如使用 Nacos、Zookeeper 等配置中心。这种方式有更好的实时性和一致性保证。生产环境下一般采用 push 模式的数据源。 |   规则持久化；一致性；快速   | 引入第三方依赖                                               |</p>
-<hr>
-<hr>
-<hr>
-<h2 id="三种容错机制对比："><a href="#三种容错机制对比：" class="headerlink" title="三种容错机制对比："></a><strong>三种容错机制对比：</strong></h2><table>
-<thead>
-<tr>
-<th></th>
-<th align="center"></th>
-<th align="center">Sentinel</th>
-<th align="center">Hystrix</th>
-<th align="left">resilience4j</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>隔离策略</td>
-<td align="center">信号量隔离（并发线程数限流）</td>
-<td align="center">线程池隔离/信号量隔离</td>
-<td align="center">信号量隔离</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>熔断降级策略</td>
-<td align="center">基于响应时间、异常比率、异常数</td>
-<td align="center">基于异常比率</td>
-<td align="center">基于异常比率、响应时间</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>实时统计实现</td>
-<td align="center">滑动窗口（LeapArray）</td>
-<td align="center">滑动窗口（基于 RxJava）</td>
-<td align="center">Ring Bit Buffer</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>动态规则配置</td>
-<td align="center">支持多种数据源</td>
-<td align="center">支持多种数据源</td>
-<td align="center">有限支持</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>扩展性</td>
-<td align="center">多个扩展点</td>
-<td align="center">插件的形式</td>
-<td align="center">接口的形式</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>基于注解的支持</td>
-<td align="center">支持</td>
-<td align="center">支持</td>
-<td align="center">支持</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>限流</td>
-<td align="center">基于 QPS，支持基于调用关系的限流</td>
-<td align="center">有限的支持</td>
-<td align="center">Rate Limiter</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>流量整形</td>
-<td align="center">支持预热模式、匀速器模式、预热排队模式</td>
-<td align="center">不支持</td>
-<td align="center">简单的 Rate Limiter 模式</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>系统自适应保护</td>
-<td align="center">支持</td>
-<td align="center">不支持</td>
-<td align="center">不支持</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>控制台</td>
-<td align="center">提供开箱即用的控制台，可配置规则、查看秒级监控、机器发现等</td>
-<td align="center">简单的监控查看</td>
-<td align="center">不提供控制台，可对接其它监控系统</td>
-<td align="left"></td>
-</tr>
-</tbody></table>
-
+        
+          <a class="article-more-a" href="/2021/07/09/%E7%86%94%E6%96%AD%E9%99%90%E6%B5%81/#more">more >></a>
+        
       
 
       
@@ -530,33 +274,10 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class personClass1 = Person<span class="class">.<span class="keyword">class</span></span>;</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>通过Class.forName()获取<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> Class&lt;?&gt; aClass = Class.forName(<span class="string">"com.xing.refection.Person.java"</span>);</span><br></pre></td></tr></table></figure></li>
-<li>通过类加载器获取<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ClassLoader classLoader = RefectTest<span class="class">.<span class="keyword">class</span>.<span class="title">getClassLoader</span>()</span>;</span><br><span class="line">Class&lt;?&gt; aClass1 = classLoader.loadClass(<span class="string">"com.xing.refection.Person.java"</span>);</span><br></pre></td></tr></table></figure>
-<h2 id="2-通过class信息获取构造器，创建对象"><a href="#2-通过class信息获取构造器，创建对象" class="headerlink" title="2,通过class信息获取构造器，创建对象"></a>2,通过class信息获取构造器，创建对象</h2></li>
-</ul>
-<ul>
-<li><p>获取所有的public修饰的构造器</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Constructor&lt;?&gt;[] constructors &#x3D; aClass.getConstructors();</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>获取所有的构造器,包括但不限于私有构造器</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Constructor&lt;?&gt;[] declaredConstructors &#x3D; aClass.getDeclaredConstructors();</span><br></pre></td></tr></table></figure></li>
-<li><p>获取指定参数的public构造器</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Constructor&lt;?&gt; constructor &#x3D; aClass.getConstructor(Double.class, String.class);</span><br><span class="line">final Object o &#x3D; constructor.newInstance(0.25, &quot;23423&quot;);</span><br></pre></td></tr></table></figure></li>
-<li><p>获取指定参数的任何构造器</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Constructor&lt;?&gt; declaredConstructor &#x3D; aClass.getDeclaredConstructor(Integer.class, double.class);</span><br><span class="line">&#x2F;&#x2F;忽略权限检查</span><br><span class="line">declaredConstructor.setAccessible(true);</span><br><span class="line">&#x2F;&#x2F;创建构造器的对象</span><br><span class="line">Object o1 &#x3D; declaredConstructor.newInstance(22, 50.2);</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h2 id="3-获取属性"><a href="#3-获取属性" class="headerlink" title="3,获取属性"></a>3,获取属性</h2><p>public 属性</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Field name &#x3D; aClass.getField(&quot;score&quot;);</span><br><span class="line">&#x2F;&#x2F;获取属性名</span><br><span class="line">name.getName();</span><br><span class="line">&#x2F;&#x2F;获取属性类型</span><br><span class="line">name.getType();</span><br><span class="line">&#x2F;&#x2F;获取属性修饰符</span><br><span class="line">Modifier.toString(name.getModifiers());</span><br><span class="line">Object instance &#x3D; aClass.newInstance();</span><br><span class="line">&#x2F;&#x2F;设置属性值</span><br><span class="line">name.set(instance,45);</span><br><span class="line">&#x2F;&#x2F;获取属性值</span><br><span class="line">name.get(instance);</span><br></pre></td></tr></table></figure>
-
-<p>所有属性，包括private，默认，protect，public</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">        Field name &#x3D; aClass.getDeclaredField(&quot;sno&quot;);</span><br><span class="line">        &#x2F;&#x2F;获取属性名</span><br><span class="line">        name.getName();</span><br><span class="line">        &#x2F;&#x2F;获取属性类型</span><br><span class="line">        name.getType();</span><br><span class="line">        &#x2F;&#x2F;获取属性修饰符</span><br><span class="line">        Modifier.toString(name.getModifiers());</span><br><span class="line">        Object instance &#x3D; aClass.newInstance();</span><br><span class="line">        &#x2F;&#x2F;设置属性值</span><br><span class="line">&#x2F;&#x2F;私有属性不能直接set        name.set(instance,45);</span><br><span class="line">        &#x2F;&#x2F;获取属性值</span><br><span class="line">&#x2F;&#x2F;私有属性不能直接get        name.get(instance);</span><br></pre></td></tr></table></figure>
-<h2 id="4-获取方法"><a href="#4-获取方法" class="headerlink" title="4,获取方法"></a>4,获取方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Object instance &#x3D; aClass.newInstance();</span><br><span class="line">&#x2F;&#x2F;获取无参方法</span><br><span class="line">Method getName &#x3D; aClass.getMethod(&quot;getName&quot;);</span><br><span class="line">Object invoke &#x3D; getName.invoke(instance);</span><br><span class="line">&#x2F;&#x2F;获取指定参数方法</span><br><span class="line">Method getName1 &#x3D; aClass.getMethod(&quot;getName&quot;, int.class, int.class);</span><br><span class="line">Object invoke1 &#x3D; getName1.invoke(instance, 1, 2);</span><br><span class="line">&#x2F;&#x2F;获取方法名</span><br><span class="line">getName1.getName();</span><br><span class="line">&#x2F;&#x2F;获取返回值类型</span><br><span class="line">getName1.getReturnType();</span><br><span class="line">&#x2F;&#x2F;获取修饰符</span><br><span class="line">Modifier.toString(getName1.getModifiers());</span><br></pre></td></tr></table></figure>
-<h3 id="4-1-获取方法上的注解"><a href="#4-1-获取方法上的注解" class="headerlink" title="4.1 获取方法上的注解"></a>4.1 获取方法上的注解</h3><p>注：只能获取Retention.RUNTIME类型的注解</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Annotation[] annotations &#x3D; getName1.getAnnotations();</span><br></pre></td></tr></table></figure>
-
-<h2 id="5-获取类实现的接口，父类，包"><a href="#5-获取类实现的接口，父类，包" class="headerlink" title="5,获取类实现的接口，父类，包"></a>5,获取类实现的接口，父类，包</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;获取接口</span><br><span class="line">Class&lt;?&gt;[] interfaces &#x3D; aClass.getInterfaces();</span><br><span class="line">&#x2F;&#x2F;获取父类</span><br><span class="line">Class&lt;?&gt; superclass &#x3D; aClass.getSuperclass();</span><br><span class="line">&#x2F;&#x2F;获取包</span><br><span class="line">Package aPackage &#x3D; aClass.getPackage();</span><br></pre></td></tr></table></figure>
+<li><p>通过Class.forName()获取</p>
+        
+          <a class="article-more-a" href="/2021/07/08/%E5%8F%8D%E5%B0%84/#more">more >></a>
+        
       
 
       
@@ -631,30 +352,14 @@
       
         <h1 id="java中的注解都是由四个元注解组成"><a href="#java中的注解都是由四个元注解组成" class="headerlink" title="java中的注解都是由四个元注解组成"></a>java中的注解都是由四个元注解组成</h1><h3 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h3><p>用于指定自定义注解的生命周期，value为枚举值</p>
 <ul>
-<li>RetentionPolicy.SOURCE ：只在源java文件中生效</li>
-<li>RetentionPolicy.CLASS ：在编译后的.class文件中也生效，如果没添加Retention注解，则默认为此生命周期</li>
-<li>RetentionPolicy.RUNTIME ：在运行时也生效，范围最广</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#x2F;&#x2F;指定生命周期为编译后文件，该注解对编译后的内容生效</span><br><span class="line">@Retention(RetentionPolicy.CLASS)</span><br><span class="line">public @interface MyAnno &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h3><p>用于限定自定义注解能修饰于哪些元素，value为枚举值数组</p>
-<ul>
-<li>ElementType.TYPE ：类，接口，注解，枚举</li>
-<li>ElementType.FIELD ：属性</li>
-<li>ElementType.METHOD ：方法</li>
-<li>ElementType.PARAMETER ：参数</li>
-<li>ElementType.CONSTRUCTOR：构造器</li>
-<li>ElementType.LOCAL_VARIABLE：局部变量</li>
-<li>ElementType.ANNOTATION_TYPE：注解</li>
-<li>ElementType.PACKAGE：包</li>
-<li>ElementType.TYPE_PARAMETER：java8新增，可以使用在任何参数地方</li>
-<li>ElementType.TYPE_USE：java8新增，可以使用在任何地方，包括throws，implement</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#x2F;&#x2F;同一注解可以修饰多个元素，通过逗号隔开</span><br><span class="line">@Target(&#123;ElementType.TYPE_USE,ElementType.ANNOTATION_TYPE&#125;)</span><br><span class="line">public @interface MyAnno &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Documented-较少使用"><a href="#Documented-较少使用" class="headerlink" title="@Documented(较少使用)"></a>@Documented(较少使用)</h3><p>会被javadoc提取到api中,无value值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;源码</span><br><span class="line">@Documented</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Target(ElementType.ANNOTATION_TYPE)</span><br><span class="line">public @interface Documented &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Inherited（极少使用）"><a href="#Inherited（极少使用）" class="headerlink" title="@Inherited（极少使用）"></a>@Inherited（极少使用）</h3><p>被自定义注解修饰的类，他的子类也被修饰，无value值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;源码</span><br><span class="line">@Documented</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Target(ElementType.ANNOTATION_TYPE)</span><br><span class="line">public @interface Inherited &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p>RetentionPolicy.SOURCE ：只在源java文件中生效</p>
+</li>
+<li><p>RetentionPolicy.CLASS ：在编译后的.class文件中也生效，如果没添加Retention注解，则默认为此生命周期</p>
+</li>
+<li><p>RetentionPolicy.RUNTIME ：在运行时也生效，范围最广</p>
+        
+          <a class="article-more-a" href="/2021/07/08/%E6%B3%A8%E8%A7%A3/#more">more >></a>
+        
       
 
       
@@ -728,28 +433,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Git：Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.</p>
-<p>我们在使用git时，要知道git分成以下几个区</p>
-<h4 id="工作区：我们在开发时的版本"><a href="#工作区：我们在开发时的版本" class="headerlink" title="工作区：我们在开发时的版本"></a>工作区：我们在开发时的版本</h4><h4 id="暂存区：点击add时暂存的版本"><a href="#暂存区：点击add时暂存的版本" class="headerlink" title="暂存区：点击add时暂存的版本"></a>暂存区：点击add时暂存的版本</h4><h4 id="本地库：本地提交的版本"><a href="#本地库：本地提交的版本" class="headerlink" title="本地库：本地提交的版本"></a>本地库：本地提交的版本</h4><h4 id="远程库：服务器上的版本"><a href="#远程库：服务器上的版本" class="headerlink" title="远程库：服务器上的版本"></a>远程库：服务器上的版本</h4><p>接下来看流程图</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line"></span><br><span class="line">工作区--&gt;|git add|暂存区</span><br><span class="line">暂存区--&gt;|git commit|本地库</span><br><span class="line">本地库--&gt;|git push|远程库</span><br><span class="line">远程库--&gt;|git reset --hard|工作区</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>git reset –hard</strong> 版本号(将本地工作区和本地库同时回滚到某一版本)</li>
-<li><strong>git diff 【文件名</strong>】 工作区和本地库比较</li>
-<li><strong>git diff head [文件名]</strong>  暂存区和本地库比较</li>
-<li><strong>git branch branch01</strong>  创建branch01分支</li>
-<li><strong>git branch -v</strong> 查看所有分支</li>
-<li><strong>git checkout  [分支号]</strong> 切换分支</li>
-<li><strong>git merge [分支号]</strong>  用当前分支合并某一分支</li>
-<li><strong>git clone 远程库地址</strong> ：远程下载到本地</li>
-<li><strong>git remote add 别名  远程库地址</strong> ： 关联到远程库地址</li>
-<li><strong>git push 远程库别名1 分支1</strong>: 将本地分支提交到远程库别名1的分支1</li>
-<li><strong>git add 文件名</strong> :文件添加到缓存区</li>
-<li><strong>git commit -m “提交备注</strong>“: 提交到本地库</li>
-<li><strong>git fetch 远程库别名 分支</strong>：将远程库的内容下载到本地，工作区的内容没有更新</li>
-<li><strong>git checkout 远程库别名/分支</strong>：查看远程库内容</li>
-<li><strong>git pull 远程库别名 远程库分支</strong>：拉取远程库到本地</li>
-</ul>
-
+        
+          <a class="article-more-a" href="/2021/07/08/git%E5%91%BD%E4%BB%A4/#more">more >></a>
+        
       
 
       
@@ -895,11 +581,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">git</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color4">git</a>
               </li>
              
               <li class="article-tag-list-item">
