@@ -6,24 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>集合 | xing</title>
+  <title>Tag: database | xing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Collectionlist集合简单分类">
-<meta property="og:type" content="article">
-<meta property="og:title" content="集合">
-<meta property="og:url" content="http://yoursite.com/2021/07/12/%E9%9B%86%E5%90%88/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="xing">
+<meta property="og:url" content="http://yoursite.com/tags/database/index.html">
 <meta property="og:site_name" content="xing">
-<meta property="og:description" content="Collectionlist集合简单分类">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://yoursite.com/%E9%9B%86%E5%90%88/list.png">
-<meta property="og:image" content="http://yoursite.com/%E9%9B%86%E5%90%88/map.png">
-<meta property="og:image" content="http://yoursite.com/%E9%9B%86%E5%90%88/segment.png">
-<meta property="article:published_time" content="2021-07-12T08:51:30.000Z">
-<meta property="article:modified_time" content="2021-07-21T15:06:58.496Z">
 <meta property="article:author" content="xing">
-<meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/%E9%9B%86%E5%90%88/list.png">
   
     <link rel="alternative" href="/atom.xml" title="xing" type="application/atom+xml">
   
@@ -189,294 +180,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-集合" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      集合
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2021" class="archive-year">2021</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2021/07/27/redis/" class="archive-article-date">
+  	<time datetime="2021-07-27T06:48:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-27</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2021/07/27/redis/">redis</a>
     </h1>
   
 
-        
-        <a href="/2021/07/12/%E9%9B%86%E5%90%88/" class="archive-article-date">
-  	<time datetime="2021-07-12T08:51:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h1><p>list集合简单分类</p>
-<p><img src="/%E9%9B%86%E5%90%88/list.png" alt="collection"></p>
-<a id="more"></a>
-
-<h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><p>list是由一堆可重复的，有序，数据组成</p>
-<h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><ul>
-<li>组成：object[] , size </li>
-<li>默认初始长度 ：10（在jdk1.8之前是构造器默认初始化数组长度为10，1.8之后是在添加元素之后才初始化数组）</li>
-<li>扩容：当添加的元素大于数组长度的，扩容为原来的1.5倍</li>
-<li>优点：查询，修改效率高</li>
-<li>缺点：增加，删除效率低，非线程安全的</li>
-</ul>
-<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><ul>
-<li><p>组成：双向链表的结点组成，包含头节点，尾节点</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    E item;</span><br><span class="line">    Node&lt;E&gt; next;</span><br><span class="line">    Node&lt;E&gt; prev;</span><br><span class="line"></span><br><span class="line">    Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</span><br><span class="line">        <span class="keyword">this</span>.item = element;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">        <span class="keyword">this</span>.prev = prev;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li>默认初始长度：空链表</li>
-<li>扩容：增加一个节点，可以从头插入，也可以尾部插入</li>
-<li>优点：插入，删除效率高</li>
-<li>缺点：查询，修改效率低，非线程安全</li>
-</ul>
-<h3 id="Vector-淘汰"><a href="#Vector-淘汰" class="headerlink" title="Vector(淘汰)"></a>Vector(淘汰)</h3><ul>
-<li>组成：数组 object[],size</li>
-<li>初始长度：默认为10</li>
-<li>扩容：扩大为原来的两倍</li>
-<li>优点：线程安全，每个增删改方法都增加了synchronized锁</li>
-<li>缺点：性能低</li>
-<li>替代： Collections.synchronizedList(new ArrayList&lt;&gt;())；锁的是代码块，比锁方法范围小</li>
-</ul>
-<h3 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h3><ul>
-<li>组成：数组Object[]</li>
-<li>初始长度：默认空数组</li>
-<li>扩容：没有扩容，来一个长度加一</li>
-<li>优点：add方法时加锁，复制原数组，长度加一，线程安全</li>
-<li>缺点：需要双倍的空间，适合读多，写少的场景</li>
-</ul>
-<h2 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h2><p>set是一堆无序，不可重复的元素组成</p>
-<h3 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h3><p>底层通过HashMap的key实现，value都为new Object()</p>
-<h3 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h3><p>底层通过TreeMap的key实现，value都为new Object()</p>
-<h2 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h2><p>先进先出的一种数据结构</p>
-<h3 id="BlockingQueue-阻塞队列"><a href="#BlockingQueue-阻塞队列" class="headerlink" title="BlockingQueue 阻塞队列"></a>BlockingQueue 阻塞队列</h3><p>阻塞方法：put() 队列满时，等待放入；take(),poll()对列为空时等待</p>
-<p>非阻塞方法：add() 队列满时抛异常,offer() 队列满时返回false; peek()对列为空时返回空</p>
-<h5 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h5><p>构造函数必须指定队列大小，底层由数组实现，使用了一个ReentrantLock，两个Condition队列，读写共用同一把锁</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public ArrayBlockingQueue(int capacity, boolean fair) &#123;  &#x2F;&#x2F;默认非公平锁</span><br><span class="line">    if (capacity &lt;&#x3D; 0)</span><br><span class="line">        throw new IllegalArgumentException();</span><br><span class="line">    this.items &#x3D; new Object[capacity];</span><br><span class="line">    lock &#x3D; new ReentrantLock(fair);</span><br><span class="line">    &#x2F;&#x2F;等待非空队列，当take时队列为空，则notEmpty.await();未空时，在拿出元素后，notFull.signal()唤醒put的等待</span><br><span class="line">    notEmpty &#x3D; lock.newCondition();   </span><br><span class="line">    &#x2F;&#x2F;等待非满队列, 当put对列满了时，notFull.await();未满时，在添加元素之后notEmpty.signal()唤醒take的等待</span><br><span class="line">    notFull &#x3D;  lock.newCondition();   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h5><p>底层由单向链表组成，支持读写同时操作，由两个ReentrantLock组成，初始换可以指定链表长度，也可以不指定，默认最大整数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;** Lock held by take, poll, etc *&#x2F;</span><br><span class="line">private final ReentrantLock takeLock &#x3D; new ReentrantLock();</span><br><span class="line"></span><br><span class="line">&#x2F;** Wait queue for waiting takes *&#x2F;</span><br><span class="line">private final Condition notEmpty &#x3D; takeLock.newCondition();</span><br><span class="line"></span><br><span class="line">&#x2F;** Lock held by put, offer, etc *&#x2F;</span><br><span class="line">private final ReentrantLock putLock &#x3D; new ReentrantLock();</span><br><span class="line"></span><br><span class="line">&#x2F;** Wait queue for waiting puts *&#x2F;</span><br><span class="line">private final Condition notFull &#x3D; putLock.newCondition();</span><br></pre></td></tr></table></figure>
-
-<h5 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h5><p>SynchronousQueue是无界的，是一种无缓冲的等待队列，但是由于该Queue本身的特性，在某次添加元素后必须等待其他线程取走后才能继续添加；可以认为SynchronousQueue是一个缓存值为1的阻塞队列</p>
-<h5 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h5><p>PriorityBlockingQueue是一个无界有序的阻塞队列,不支持插入非comparable的对象,支持按照指定顺序取出元素</p>
-<h5 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h5><p>DelayQueue一般用于生产者消费者模式，插入的元素需要实现Delayed接口</p>
-<h1 id="MAP"><a href="#MAP" class="headerlink" title="MAP"></a>MAP</h1><p>map是由一堆k-v对组成的数据结构，其中的key值需要实现hashCode()方法，equals()方法，下图为简单分类</p>
-<p><img src="/%E9%9B%86%E5%90%88/map.png" alt="map"></p>
-<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><ul>
-<li><p>组成：数组+单向链表=哈希表</p>
-</li>
-<li><p>初始长度：默认数组长度为16</p>
-</li>
-<li><p>扩容：当<strong>节点</strong>的数量达到（数组长度*负载因子DEFAULT_LOAD_FACTOR=0.75）时，数组会扩容为原来的2倍。如果put操作计算key的hash值取模运算一样时，会在当前下标生成链表，当链表的长度大于TREEIFY_THRESHOLD=8时，会将链表转化成红黑树</p>
-<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1，为什么负载因子是0.75</span><br><span class="line">这个是取了一个空间利用率和查询效率的平衡，太大查询则hash冲突会更多，查询更慢，太小则会平凡触发扩容，空间利用率不高</span><br><span class="line">2，为什么数组的长度要为2的次幂倍数</span><br><span class="line">这个是为了能够通过&amp;运算取模（'&amp;'运算是'<span class="comment">%'的10倍）；减少hash冲突</span></span><br><span class="line">3，为什么引入红黑树</span><br><span class="line">当计算key的hash值的取模运算得到的下标一样时，会转换成链表，但是链表的查询效率较低，所以当链表长度大于8时，会转换成红黑树以增加查询效率，但是红黑树在插入数据时可能会通过左旋，右旋变色来调整平衡，维护成本过高，所以在链表较短时不适用红黑树</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>优点：查询效率高</p>
-</li>
-<li><p>缺点：非线程安全</p>
-</li>
-</ul>
-<h3 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h3><ul>
-<li>组成：哈希表+双向链表，相对于HashMap增加了头节点和尾节点</li>
-<li>特点：数据按照插入顺序排序，其余同HashMap一样</li>
-</ul>
-<h2 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h2><ul>
-<li>组成：红黑树</li>
-<li>初始：跟节点</li>
-<li>扩容：插入节点，调整红黑树结构以满足规则</li>
-<li>优点：查询较快，数据可以按照指定顺序排序</li>
-<li>缺点：插入的key需要实现Comparable接口，或者Comparator外部比较器，插入时二叉树的左旋，右旋成本较高</li>
-</ul>
-<h2 id="HashTable"><a href="#HashTable" class="headerlink" title="HashTable"></a>HashTable</h2><ul>
-<li>特点：给自己的get，put方法加了synchronized锁，其余同HashMap一样</li>
-<li>优点：线程安全</li>
-<li>缺点：性能低下,所有的操作都是竞争同一把锁，被淘汰的</li>
-<li>替代方案： Collections.synchronizedMap(new HashMap&lt;&gt;())</li>
-</ul>
-<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><p><strong>在1.7版本时</strong></p>
-<ul>
-<li><p>组成：</p>
-<p>是由Segement[]数组组成，每个Segement都作为一个独立的锁，这样在写入新数据时可以支持Segement数组大小的线程同时写操作，其实每一个segement就相当于一个HashTable</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Segment</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">ReentrantLock</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123; </span><br><span class="line">    <span class="keyword">transient</span> <span class="keyword">volatile</span> <span class="keyword">int</span> count;   <span class="comment">//Segment种元素的数量</span></span><br><span class="line">    <span class="keyword">transient</span> <span class="keyword">int</span> modCount;         <span class="comment">//操作的数量</span></span><br><span class="line">    <span class="keyword">transient</span> <span class="keyword">int</span> threshold;        <span class="comment">//阈值，segment种的元素超过这个数量就开始扩容</span></span><br><span class="line">    <span class="keyword">transient</span> <span class="keyword">volatile</span> HashEntry&lt;K,V&gt;[] table; <span class="comment">//链表数组</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">float</span> loadFactor; <span class="comment">//负载因子</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/%E9%9B%86%E5%90%88/segment.png" alt="segment"></p>
-</li>
-</ul>
-<ul>
-<li><p>初始：默认segment长度为16,segment种的table长度默认为16</p>
-</li>
-<li><p>扩容：只对table扩容，segment长度确定后就不会变，由于table是volatile的所以在get方法时没有加锁</p>
-</li>
-<li><p>优点：使用了分段锁，降低了锁的粒度，可以保证性能，只有在put方法时加锁</p>
-</li>
-<li><p>缺点：计算获取key的位置时，需要两次hash计算</p>
-</li>
-</ul>
-<p><strong>在1.8版本以及之后</strong></p>
-<ul>
-<li><p>组成：node[]数组+链表/红黑树</p>
-</li>
-<li><p>初始：默认长度为16</p>
-</li>
-<li><p>扩容：当某一链表的长度超过8时，如果数组的长度低于64时，则扩容</p>
-<p>​            当某一链表的长度超过8时，如果数组的长度不低于64时，则将链表转换成红黑树</p>
-<p>​            通过unsafe+synchronized来加锁</p>
-<p>​             当插入一条新数据时：先通过hash计算到数组下标，拿到该下标元素，1、为空则CAS插入；2、为-1则说明在扩容，则跟着一起扩容；3、else则加锁put</p>
-</li>
-</ul>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">database</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2021/07/12/%E9%9B%86%E5%90%88/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2021/07/20/spring/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          spring
-        
-      </div>
-    </a>
   
   
-    <a href="/2021/07/12/JVM/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">JVM</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -499,9 +256,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
