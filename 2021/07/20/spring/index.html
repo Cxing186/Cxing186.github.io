@@ -8,13 +8,15 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>spring | xing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="spring的优点：  方便解耦，简化开发 AOP切面编程 声明式事务 整合junit，方便测试 方便整合各种优秀框架 丰富的功能封装 规范的源码学习样本">
+<meta property="og:type" content="article">
 <meta property="og:title" content="spring">
 <meta property="og:url" content="http://yoursite.com/2021/07/20/spring/index.html">
 <meta property="og:site_name" content="xing">
+<meta property="og:description" content="spring的优点：  方便解耦，简化开发 AOP切面编程 声明式事务 整合junit，方便测试 方便整合各种优秀框架 丰富的功能封装 规范的源码学习样本">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-07-20T08:34:09.000Z">
-<meta property="article:modified_time" content="2021-07-20T08:34:42.681Z">
+<meta property="article:modified_time" content="2021-08-07T09:19:30.281Z">
 <meta property="article:author" content="xing">
 <meta property="article:tag" content="frame">
 <meta name="twitter:card" content="summary">
@@ -203,7 +205,41 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>spring的优点：</p>
+<ul>
+<li>方便解耦，简化开发</li>
+<li>AOP切面编程</li>
+<li>声明式事务</li>
+<li>整合junit，方便测试</li>
+<li>方便整合各种优秀框架</li>
+<li>丰富的功能封装</li>
+<li>规范的源码学习样本</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="IOC（控制反转）"><a href="#IOC（控制反转）" class="headerlink" title="IOC（控制反转）"></a>IOC（控制反转）</h2><p>创建对象的权力，交给spring容器管理，spring通过读取配置文件的信息，通过反射创建对象，然后将对象放在map中存储起来，当我们需要某个对象时，不需要new，可以通过容器由id获取</p>
+<h6 id="实现步骤："><a href="#实现步骤：" class="headerlink" title="实现步骤："></a>实现步骤：</h6><ol>
+<li>解析xml配置文件</li>
+<li>通过反射实例化对象，放入容器中</li>
+<li>工厂模式返回Bean对象，beanFactory中的getBean方法<h2 id="DI-依赖注入"><a href="#DI-依赖注入" class="headerlink" title="DI(依赖注入)"></a>DI(依赖注入)</h2>给对象的属性赋值，处理的是对象属性赋值和互相依赖关系</li>
+</ol>
+<ul>
+<li>bean的生命周期<br>构造(创建实例)–&gt;设置值(set)–&gt;初始化方法（init）–&gt;获取–&gt;关闭容器，销毁<br>在初始化阶段可以自己定义BeanPostProcesser,增加初始化前和初始化后的操作<h3 id="注解注入"><a href="#注解注入" class="headerlink" title="注解注入"></a>注解注入</h3></li>
+<li>@Autoware:是spring的注解，通过增加@qulifier来配合使用，解决同一个接口的多个实现类</li>
+<li>@Resource:是jdk中的注解，可以通过name属性解决一个接口的多个实现类问题</li>
+</ul>
+<h2 id="自动装配"><a href="#自动装配" class="headerlink" title="自动装配"></a>自动装配</h2><h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><h5 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h5><pre><code>代理类和被代理类需要实现同一个接口，在编译期就已经确认好了目标类和代理类
+实现方式可以通过继承目标类和组合目标类的方式实现</code></pre><h5 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h5><pre><code>JDK动态代理：面向接口，只能增强接口中声明的方法
+Object proxyInstance = Proxy.newProxyInstance(this.getClass().getClassLoader(), dinner.getClass().getInterfaces(), new MyHandler(dinner));
+cglib第三方动态代理：面向父类</code></pre><p>AOP切面编程可以帮助我们在不修改原有代码的情况下对程序的功能进行扩展，往往用于日志处理，权限控制，性能检测，事务控制等。在有接口的情况下，使用jdk的动态代理，没有接口实现的情况下，使用的是cglib的动态代理</p>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><h3 id="jdbctemplate"><a href="#jdbctemplate" class="headerlink" title="jdbctemplate"></a>jdbctemplate</h3><p>jdbctemplate是spring集成的对数据库的操作的封装</p>
+<p>事务的特征：ACID,原子性，一致性，隔离性，持久性<br>spring中实现事务的方式：</p>
+<ul>
+<li>编程式：由自己代码实现，不推荐</li>
+<li>声明式：注解，xml配置<h3 id="声明式事务"><a href="#声明式事务" class="headerlink" title="声明式事务"></a>声明式事务</h3>事务管理器：DataSourceTransactionManager +<br>注解：@Transactional<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">@Target(&#123;ElementType.TYPE, ElementType.METHOD&#125;)</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Inherited</span><br><span class="line">@Documented</span><br><span class="line">public @interface Transactional &#123;</span><br><span class="line">    @AliasFor(&quot;transactionManager&quot;)</span><br><span class="line">    String value() default &quot;&quot;;</span><br><span class="line"></span><br><span class="line">    @AliasFor(&quot;value&quot;)</span><br><span class="line">    String transactionManager() default &quot;&quot;;</span><br><span class="line"></span><br><span class="line">    String[] label() default &#123;&#125;;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;控制事务的传播级别</span><br><span class="line">    &#x2F;&#x2F;默认值：Propagation.REQUIRED，保证方法在一个事务中执行</span><br><span class="line">    &#x2F;&#x2F;Propagation.REQUIRES_NEW,也能保证所有方法都在同一个事务中运行，但是会新建一个事务</span><br><span class="line">    Propagation propagation() default Propagation.REQUIRED;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;事务隔离级别，默认为Isolation.DEFAULT，用的数据库的隔离级别</span><br><span class="line">    Isolation isolation() default Isolation.DEFAULT;</span><br><span class="line"></span><br><span class="line">    int timeout() default -1;</span><br><span class="line"></span><br><span class="line">    String timeoutString() default &quot;&quot;;</span><br><span class="line"></span><br><span class="line">    boolean readOnly() default false;</span><br><span class="line"></span><br><span class="line">    Class&lt;? extends Throwable&gt;[] rollbackFor() default &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    String[] rollbackForClassName() default &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    Class&lt;? extends Throwable&gt;[] noRollbackFor() default &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    String[] noRollbackForClassName() default &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
       
 
       
@@ -444,10 +480,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">frame</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">database</a>
               </li>
              
@@ -457,6 +489,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">distributed</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">frame</a>
               </li>
              
               <li class="article-tag-list-item">
