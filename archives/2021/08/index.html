@@ -6,19 +6,14 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>git命令 | xing</title>
+  <title>Archives: 2021/8 | xing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Git：Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.">
-<meta property="og:type" content="article">
-<meta property="og:title" content="git命令">
-<meta property="og:url" content="http://yoursite.com/2021/07/08/git%E5%91%BD%E4%BB%A4/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="xing">
+<meta property="og:url" content="http://yoursite.com/archives/2021/08/index.html">
 <meta property="og:site_name" content="xing">
-<meta property="og:description" content="Git：Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-07-08T08:14:11.000Z">
-<meta property="article:modified_time" content="2021-07-13T09:02:21.113Z">
 <meta property="article:author" content="xing">
-<meta property="article:tag" content="git">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="xing" type="application/atom+xml">
@@ -185,194 +180,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-git命令" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      git命令
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2021" class="archive-year">2021</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2021/08/12/MySQL/" class="archive-article-date">
+  	<time datetime="2021-08-12T10:42:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-12</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2021/08/12/MySQL/">MySQL</a>
     </h1>
   
 
-        
-        <a href="/2021/07/08/git%E5%91%BD%E4%BB%A4/" class="archive-article-date">
-  	<time datetime="2021-07-08T08:14:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Git：Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.</p>
-<a id="more"></a>
-
-<p>我们在使用git时，要知道git分成以下几个区</p>
-<h5 id="工作区：我们在开发时的版本"><a href="#工作区：我们在开发时的版本" class="headerlink" title="工作区：我们在开发时的版本"></a>工作区：我们在开发时的版本</h5><h5 id="暂存区：点击add时暂存的版本"><a href="#暂存区：点击add时暂存的版本" class="headerlink" title="暂存区：点击add时暂存的版本"></a>暂存区：点击add时暂存的版本</h5><h5 id="本地库：本地提交的版本"><a href="#本地库：本地提交的版本" class="headerlink" title="本地库：本地提交的版本"></a>本地库：本地提交的版本</h5><h5 id="远程库：服务器上的版本"><a href="#远程库：服务器上的版本" class="headerlink" title="远程库：服务器上的版本"></a>远程库：服务器上的版本</h5><p>接下来看流程图</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line"></span><br><span class="line">工作区--&gt;|git add|暂存区</span><br><span class="line">暂存区--&gt;|git commit|本地库</span><br><span class="line">本地库--&gt;|git push|远程库</span><br><span class="line">远程库--&gt;|git reset --hard|工作区</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>git reset –hard</strong> 版本号(将本地工作区和本地库同时回滚到某一版本)</li>
-<li><strong>git diff 【文件名</strong>】 工作区和本地库比较</li>
-<li><strong>git diff head [文件名]</strong>  暂存区和本地库比较</li>
-<li><strong>git branch branch01</strong>  创建branch01分支</li>
-<li><strong>git branch -v</strong> 查看所有分支</li>
-<li><strong>git checkout  [分支号]</strong> 切换分支</li>
-<li><strong>git merge [分支号]</strong>  用当前分支合并某一分支</li>
-<li><strong>git clone 远程库地址</strong> ：远程下载到本地</li>
-<li><strong>git remote add 别名  远程库地址</strong> ： 关联到远程库地址</li>
-<li><strong>git push 远程库别名1 分支1</strong>: 将本地分支提交到远程库别名1的分支1</li>
-<li><strong>git add 文件名</strong> :文件添加到缓存区</li>
-<li><strong>git commit -m “提交备注</strong>“: 提交到本地库</li>
-<li><strong>git fetch 远程库别名 分支</strong>：将远程库的内容下载到本地，工作区的内容没有更新</li>
-<li><strong>git checkout 远程库别名/分支</strong>：查看远程库内容</li>
-<li><strong>git pull 远程库别名 远程库分支</strong>：拉取远程库到本地</li>
-</ul>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">git</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">database</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2021/07/08/git%E5%91%BD%E4%BB%A4/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2021/07/08/%E6%B3%A8%E8%A7%A3/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          注解
-        
-      </div>
-    </a>
   
   
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -395,8 +256,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
