@@ -16,6 +16,7 @@
 <meta property="og:description" content="MySql服务 MySQL是一个关系型数据库管理系统，由瑞典[MySQL AB](https:&#x2F;&#x2F;baike.baidu.com&#x2F;item&#x2F;MySQL AB&#x2F;2620844) 公司开发，属于 Oracle 旗下产品。MySQL 是最流行的关系型数据库管理系统之一，在 WEB 应用方面，MySQL是最好的 RDBMS (Relational Database Management System，关系">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://yoursite.com/mysql/mysql.PNG">
+<meta property="og:image" content="http://yoursite.com/mysql/explain.PNG">
 <meta property="og:image" content="http://yoursite.com/mysql/%E6%95%B0%E6%8D%AE%E6%A1%88%E4%BE%8B.png">
 <meta property="og:image" content="http://yoursite.com/mysql/1.png">
 <meta property="og:image" content="http://yoursite.com/mysql/2.png">
@@ -24,7 +25,7 @@
 <meta property="og:image" content="http://yoursite.com/mysql/5.png">
 <meta property="og:image" content="http://yoursite.com/mysql/6.png">
 <meta property="article:published_time" content="2021-08-12T10:42:16.000Z">
-<meta property="article:modified_time" content="2021-08-12T12:47:48.330Z">
+<meta property="article:modified_time" content="2021-08-16T13:07:38.972Z">
 <meta property="article:author" content="xing">
 <meta property="article:tag" content="database">
 <meta name="twitter:card" content="summary">
@@ -214,7 +215,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="MySql服务"><a href="#MySql服务" class="headerlink" title="MySql服务"></a>MySql服务</h2><blockquote>
+        <h3 id="MySql服务"><a href="#MySql服务" class="headerlink" title="MySql服务"></a>MySql服务</h3><blockquote>
 <p>MySQL是一个<strong><a href="https://baike.baidu.com/item/关系型数据库管理系统/696511" target="_blank" rel="noopener">关系型数据库管理系统</a></strong>，由瑞典[MySQL AB](<a href="https://baike.baidu.com/item/MySQL" target="_blank" rel="noopener">https://baike.baidu.com/item/MySQL</a> AB/2620844) 公司开发，属于 <a href="https://baike.baidu.com/item/Oracle" target="_blank" rel="noopener">Oracle</a> 旗下产品。MySQL 是最流行的<a href="https://baike.baidu.com/item/关系型数据库管理系统/696511" target="_blank" rel="noopener">关系型数据库管理系统</a>之一，在 <a href="https://baike.baidu.com/item/WEB/150564" target="_blank" rel="noopener">WEB</a> 应用方面，MySQL是最好的 <a href="https://baike.baidu.com/item/RDBMS/1048260" target="_blank" rel="noopener">RDBMS</a> (Relational Database Management System，关系数据库管理系统) 应用软件之一</p>
 </blockquote>
 <a id="more"></a>
@@ -259,6 +260,37 @@
 <p><strong>回表</strong>：当创建的索引不是主键这个字段时，B+树中的叶子节点存储的数据是主键的id，通过这个索引来查数据时，需要遍历一次索引B+树来查到对应的主键，再通过主键的B+树查找到所有数据</p>
 </li>
 </ul>
+<h4 id="Mysql执行计划"><a href="#Mysql执行计划" class="headerlink" title="Mysql执行计划"></a>Mysql执行计划</h4><p>通过在查询语句前加上explain可以查看执行计划</p>
+<p><img src="/mysql/explain.PNG" alt="explain"></p>
+<h5 id="id"><a href="#id" class="headerlink" title="id"></a>id</h5><p>执行语句按照id从大到小执行，id相同时从上到下顺序执行</p>
+<h5 id="type"><a href="#type" class="headerlink" title="type"></a>type</h5><p>表示是以何种方式访问数据，效率从好到坏依次是：</p>
+<p>system&gt;const（索引查找单条记录）&gt;eq_ref（使用唯一性索引查找）&gt;ref（非唯一性索引进行查找）&gt;fulltext&gt;ref_or_null（某个索引字段为null的查询条件）&gt;index_merge（查询过程中，多个索引组合使用）&gt;unique_subquery（子查询主键索引）&gt;index_subquery（利用索引关联子查询，不再扫描全表）&gt;range（索引的范围查找）&gt;index（全索引扫描）&gt;ALL（全表扫描）</p>
+<p>一般情况下，最好能达到ref级别</p>
+<h5 id="key"><a href="#key" class="headerlink" title="key"></a>key</h5><p>实际使用到的索引</p>
+<h5 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h5><p>显示索引的哪一列被使用了，最好是一个常数</p>
+<h4 id="Mysql锁机制"><a href="#Mysql锁机制" class="headerlink" title="Mysql锁机制"></a>Mysql锁机制</h4><p>锁是计算机协调多个线程或者进程并发访问某一资源的机制</p>
+<p><strong>表级锁：</strong>开销小，加锁快；不会出现死锁；锁定粒度最大；发生锁冲突的概率最高，并发度最低</p>
+<p><strong>行级锁：</strong>开销大，加锁慢；会出现死锁；锁定粒度最小；发生锁冲突最低，并发度最高</p>
+<h5 id="MyISAM表锁"><a href="#MyISAM表锁" class="headerlink" title="MyISAM表锁"></a>MyISAM表锁</h5><p>MyISAM在查询时，会自动给表加上读锁，当给表做增删改时，会自动给表加上写锁</p>
+<p><strong>读共享锁</strong>：当一个线程获得这张表的读锁时，当前线程和其它线程都可以对这张表做查询操作，但是都不能增，删，改操作</p>
+<p><strong>写阻塞锁：</strong>当一个线程获得一个表的写锁之后，当前线程可以对这张表进行增删改查操作，其它线程对这张表的操作都会阻塞，直到当前线程释放这个表锁</p>
+<h5 id="InnoDB行锁"><a href="#InnoDB行锁" class="headerlink" title="InnoDB行锁"></a>InnoDB行锁</h5><p><strong>共享锁（s）</strong>：又称读锁，若事务T对对象A加上了共享锁，则事务T只能对A进行查询操作，不能修改，其它事务也可以对对象A加上S锁，但是不能加上x锁</p>
+<p><strong>排他锁（x）</strong>：又称写锁，当一个事务获取对象的排他锁时，允许该事务对此对象做修改操作，但是其它事务不能获取该对象的S锁和X锁</p>
+<p>InnoDB的行锁实现：是通过给索引上的索引加锁实现的，所以只有通过索引查询条件时才能使用行级锁，不然就是使用的表锁。在InnoDB中，update,insert,delete是默认加上<strong>排它锁</strong>的，select是不会加上任何锁的，可以使用select ……for update加上<strong>排它锁</strong>，使用select …… lock in share mode锁的方式加上<strong>共享锁</strong></p>
+<h3 id="MySql主从复制"><a href="#MySql主从复制" class="headerlink" title="MySql主从复制"></a>MySql主从复制</h3><h4 id="主从复制的优点"><a href="#主从复制的优点" class="headerlink" title="主从复制的优点"></a>主从复制的优点</h4><ul>
+<li><p>做数据库的备份</p>
+</li>
+<li><p>读写分离，当主数据库在加表锁写时，从数据库可以对外提供查询操作</p>
+</li>
+<li><p>架构的扩展，单机无法满足业务量的请求时，可以做多库的存储，可以降低单机的I/O频率，提高单个机器的I/O性能</p>
+</li>
+</ul>
+<h4 id="主从复制的步骤"><a href="#主从复制的步骤" class="headerlink" title="主从复制的步骤"></a>主从复制的步骤</h4><ol>
+<li>master服务器将数据的改变记录成二进制文件存入binlog</li>
+<li>slave会在一定的时间间隔内，去查看主服务器的binlog是否有改变，如果发生改变，则开启一个I/O Thread请求master二进制文件</li>
+<li>同时主节点为每个I/O线程启动一个dump线程，用于向其发送二进制事件，并保存至从节点本地的中继日志中，从节点将启动SQL线程从中继日志中读取二进制日志，在本地重放，使得其数据和主节点的保持一致，最后I/OThread和SQLThread将进入睡眠状态，等待下一次被唤醒。</li>
+</ol>
+<h4 id="主从复制延迟问题"><a href="#主从复制延迟问题" class="headerlink" title="主从复制延迟问题"></a>主从复制延迟问题</h4><p>mysql5.7之后使用了MTS并行复制技术,永久解决数据同步延时问题</p>
 <h1 id="MVCC多版本并发控制"><a href="#MVCC多版本并发控制" class="headerlink" title="MVCC多版本并发控制"></a>MVCC多版本并发控制</h1><h3 id="1、MVCC"><a href="#1、MVCC" class="headerlink" title="1、MVCC"></a>1、MVCC</h3><p>​        MVCC，全称Multi-Version Concurrency Control，即多版本并发控制。MVCC是一种并发控制的方法，一般在数据库管理系统中，实现对数据库的并发访问，在编程语言中实现事务内存。</p>
 <pre><code>MVCC在MySQL InnoDB中的实现主要是为了提高数据库并发性能，用更好的方式去处理读写冲突，做到即使有读写冲突时，也能做到不加锁，非阻塞并发读。</code></pre><h3 id="2、当前读"><a href="#2、当前读" class="headerlink" title="2、当前读"></a>2、当前读</h3><p>​        像select lock in share mode(共享锁), select for update ; update, insert ,delete(排他锁)这些操作都是一种当前读，为什么叫当前读？就是它读取的是记录的最新版本，读取时还要保证其他并发事务不能修改当前记录，会对读取的记录进行加锁。</p>
 <h3 id="3、快照读（提高数据库的并发查询能力）"><a href="#3、快照读（提高数据库的并发查询能力）" class="headerlink" title="3、快照读（提高数据库的并发查询能力）"></a>3、快照读（提高数据库的并发查询能力）</h3><p>​        像不加锁的select操作就是快照读，即不加锁的非阻塞读；快照读的前提是隔离级别不是串行级别，串行级别下的快照读会退化成当前读；之所以出现快照读的情况，是基于提高并发性能的考虑，快照读的实现是基于多版本并发控制，即MVCC,可以认为MVCC是行锁的一个变种，但它在很多情况下，避免了加锁操作，降低了开销；既然是基于多版本，即快照读可能读到的并不一定是数据的最新版本，而有可能是之前的历史版本</p>
