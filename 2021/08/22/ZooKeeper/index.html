@@ -6,22 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>线程 | xing</title>
+  <title>ZooKeeper | xing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="什么是线程是操作系统能够进行运算调度的最小单位。一个进程可以包含多个线程，每条线程可以并行执行不同的任务">
+  <meta name="description" content="ZooKeeper是一个可扩展，可靠，保证顺序性的协调性服务 特点 高可用（来自于快速的恢复） 主挂了后可以在200ms内恢复 目录树结构 由一主多从+observer组成，observer不参加选主  paxo它是一个基于消息传递的一致性算法，被认为是唯一的分布式一致性算法  集群中每个节点都有事件列表，每个事件都有一个事务编号，节点收到的事件id只有大于当前的事件id才可以开始投票事务 集群中">
 <meta property="og:type" content="article">
-<meta property="og:title" content="线程">
-<meta property="og:url" content="http://yoursite.com/2021/07/21/%E7%BA%BF%E7%A8%8B/index.html">
+<meta property="og:title" content="ZooKeeper">
+<meta property="og:url" content="http://yoursite.com/2021/08/22/ZooKeeper/index.html">
 <meta property="og:site_name" content="xing">
-<meta property="og:description" content="什么是线程是操作系统能够进行运算调度的最小单位。一个进程可以包含多个线程，每条线程可以并行执行不同的任务">
+<meta property="og:description" content="ZooKeeper是一个可扩展，可靠，保证顺序性的协调性服务 特点 高可用（来自于快速的恢复） 主挂了后可以在200ms内恢复 目录树结构 由一主多从+observer组成，observer不参加选主  paxo它是一个基于消息传递的一致性算法，被认为是唯一的分布式一致性算法  集群中每个节点都有事件列表，每个事件都有一个事务编号，节点收到的事件id只有大于当前的事件id才可以开始投票事务 集群中">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://yoursite.com/%E7%BA%BF%E7%A8%8B/states.JPG">
-<meta property="article:published_time" content="2021-07-21T14:55:34.000Z">
-<meta property="article:modified_time" content="2021-08-05T13:13:44.552Z">
+<meta property="article:published_time" content="2021-08-22T03:12:20.000Z">
+<meta property="article:modified_time" content="2021-08-28T03:14:58.066Z">
 <meta property="article:author" content="xing">
-<meta property="article:tag" content="java">
+<meta property="article:tag" content="distributed">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/%E7%BA%BF%E7%A8%8B/states.JPG">
   
     <link rel="alternative" href="/atom.xml" title="xing" type="application/atom+xml">
   
@@ -187,96 +185,50 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-线程" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-ZooKeeper" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      线程
+      ZooKeeper
     </h1>
   
 
         
-        <a href="/2021/07/21/%E7%BA%BF%E7%A8%8B/" class="archive-article-date">
-  	<time datetime="2021-07-21T14:55:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-21</time>
+        <a href="/2021/08/22/ZooKeeper/" class="archive-article-date">
+  	<time datetime="2021-08-22T03:12:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="什么是线程"><a href="#什么是线程" class="headerlink" title="什么是线程"></a>什么是线程</h2><p>是操作系统能够进行运算调度的最小单位。一个进程可以包含多个线程，每条线程可以并行执行不同的任务</p>
-<a id="more"></a>
-
-<h4 id="什么是线程安全"><a href="#什么是线程安全" class="headerlink" title="什么是线程安全"></a>什么是线程安全</h4><p>当多个线程同时访问同一个对象时，不用去考虑线程运行状态时的调度和交替执行，也不用增加额外的同步操作，调用方也不需要进行其它的任何协同操作，调用这个对象都能获得正确的返回结果，那么这个对象就可以认为是线程安全的。</p>
-<h3 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h3><p><img src="/%E7%BA%BF%E7%A8%8B/states.JPG" alt="states"></p>
-<h3 id="创建线程的几种方式"><a href="#创建线程的几种方式" class="headerlink" title="创建线程的几种方式"></a>创建线程的几种方式</h3><ul>
-<li><p>继承Thread()类，重写run()方法</p>
-</li>
-<li><p>实现Runnable接口，重写run()方法，在new Thread时传入实现类</p>
-</li>
-<li><p>实现callable接口，重写call()方法，这个可以有返回值</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ImplRun</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"实现runnable方式创建线程"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ImplCall implCall = <span class="keyword">new</span> ImplCall();</span><br><span class="line">        <span class="comment">//FutureTask其实是实现了Runable接口</span></span><br><span class="line">        FutureTask&lt;String&gt; stringFutureTask = <span class="keyword">new</span> FutureTask&lt;&gt;(implCall);</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> FutureTask&lt;&gt;(implCall));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
+        <p>ZooKeeper是一个可扩展，可靠，保证顺序性的协调性服务</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>高可用（来自于快速的恢复）</li>
+<li>主挂了后可以在200ms内恢复</li>
+<li>目录树结构</li>
+<li>由一主多从+observer组成，observer不参加选主</li>
 </ul>
-<h3 id="Synchonized锁和ReentranLock"><a href="#Synchonized锁和ReentranLock" class="headerlink" title="Synchonized锁和ReentranLock"></a>Synchonized锁和ReentranLock</h3><ul>
-<li><p>Synchonized：在jdk1.5前是重量级锁，在1.5之后做了优化，改为锁升级，从无锁–&gt;偏向锁–&gt;自旋锁（执行时间短；线程数量较少的适合）–&gt;重量级锁，是可重入锁</p>
-</li>
-<li><p>ReentranLock：基于AbstractQueuedSynchronizer（AQS）实现，可重入。</p>
+<h3 id="paxo"><a href="#paxo" class="headerlink" title="paxo"></a>paxo</h3><p>它是一个基于消息传递的一致性算法，被认为是唯一的分布式一致性算法</p>
 <ol>
-<li><p>ReentranLock有tryLock(time，timeunit)方法，在一定的时间范围内尝试获取锁</p>
-</li>
-<li><p>lock.interruptibby()，锁可以被打断，Synchonized不能被打断</p>
-</li>
-<li><p>可以指定为公平锁，会先检查等待队列，队列内有则队列先获取锁</p>
-</li>
+<li>集群中每个节点都有事件列表，每个事件都有一个事务编号，节点收到的事件id只有大于当前的事件id才可以开始投票事务</li>
+<li>集群中事件同意的节点大于总节点数量的一半，该事件才可以执行</li>
 </ol>
-</li>
-</ul>
-<h3 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h3><p>AQS（AbstractQueuedSynchronizer）是JAVA中众多锁以及并发工具的基础，其底层采用乐观锁，大量使用了CAS操作， 并且在冲突时，采用自旋方式重试，以实现轻量级和高效地获取锁</p>
-<p>AQS的核心是由三大特性实现的，状态，队列和CAS</p>
-<h4 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private volatile int state;</span><br></pre></td></tr></table></figure>
-
-<p>通过state这个字段来判断当前锁的状态</p>
-<p>0：表示锁未被占用</p>
-<p>大于0：表示锁已经被占用，当同一个线程占用多此时，这个值会大于0</p>
-<p>另外还需要一个属性来判断是哪个线程占用了这把锁</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;这个属性在AQS的父类AbstractOwnableSynchronizer中</span><br><span class="line">private transient Thread exclusiveOwnerThread;</span><br></pre></td></tr></table></figure>
-
-<h4 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h4><p>将线程包装成一种数据数据，存入队列中，队列为双向队列，构成队列节点的几个重要属性</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 节点所代表的线程</span><br><span class="line">volatile Thread thread;</span><br><span class="line">&#x2F;&#x2F; 双向链表，每个节点需要保存自己的前驱节点和后继节点的引用</span><br><span class="line">volatile Node prev;</span><br><span class="line">volatile Node next;</span><br><span class="line">&#x2F;&#x2F; 线程所处的等待锁的状态，初始化时，该值为0</span><br><span class="line">volatile int waitStatus;</span><br><span class="line">static final int CANCELLED &#x3D;  1;</span><br><span class="line">static final int SIGNAL    &#x3D; -1;</span><br><span class="line">static final int CONDITION &#x3D; -2;</span><br><span class="line">static final int PROPAGATE &#x3D; -3;</span><br><span class="line">&#x2F;&#x2F; 该属性用于条件队列或者共享锁</span><br><span class="line">Node nextWaiter;</span><br></pre></td></tr></table></figure>
-
-<h4 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h4><p>CAS操作主要针对5个属性，包括AQS的3个属性state,head和tail, 以及Node对象的两个属性waitStatus,next</p>
-<h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><p>ThreadLocal是用来保存当前线程使用的变量，防止被其它线程修改和使用，是线程独有的</p>
-<p>保存线程独有变量set(T value)方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void set(T value) &#123;</span><br><span class="line">	&#x2F;&#x2F;获取到当前线程</span><br><span class="line">    Thread t &#x3D; Thread.currentThread();</span><br><span class="line">    &#x2F;&#x2F;获取当前线程的ThreadLocalMap</span><br><span class="line">    ThreadLocalMap map &#x3D; getMap(t);</span><br><span class="line">    if (map !&#x3D; null)</span><br><span class="line">    	&#x2F;&#x2F;这里的this是ThreadLocal对象</span><br><span class="line">        map.set(this, value);</span><br><span class="line">    else</span><br><span class="line">        createMap(t, value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>每个线程都有ThreadLocalMap属性，用来存储当前线程独有的变量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ThreadLocal.ThreadLocalMap threadLocals</span><br></pre></td></tr></table></figure>
-
-<p>下面来看下ThreadLocalMap的属性</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;主要属性是由Entry[]数组构成</span><br><span class="line">private Entry[] table;</span><br><span class="line">&#x2F;&#x2F;entry实例中存储了每个变量值，继承了弱引用</span><br><span class="line">static class Entry extends WeakReference&lt;ThreadLocal&lt;?&gt;&gt; &#123;</span><br><span class="line">            &#x2F;** The value associated with this ThreadLocal. *&#x2F;</span><br><span class="line">            Object value;</span><br><span class="line"></span><br><span class="line">            Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">                super(k);</span><br><span class="line">                value &#x3D; v;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>弱引用：若一个对象是弱引用可达，无论当前内存是否充足它都会被回收，而软引用可达的对象在内存不充足时才会被回收，因此软引用要比弱引用“强”一些</p>
-</blockquote>
-<p><strong>这里用弱引用的原因： threadlocal在这里一共有两个地方引用了，一个线程中的key，一个是外面自己新建的ThreadLocal对象，假如这里用的是强引用，则当设置threadlocal=null时，里面的key就会因为和entry存在强引用导致无法垃圾回收掉，引起内存泄露</strong></p>
-<p>这里用了弱引用虽然解决了key无法回收的问题，但是value还是没有回收，还是会存在内存泄露的问题，所以在每次用完threadLocal时需要调用threadLocal.remove()方法，删除不用的value。</p>
-<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p>使用线程池的优势：</p>
+<h3 id="ZAB协议"><a href="#ZAB协议" class="headerlink" title="ZAB协议"></a>ZAB协议</h3><p>作用在可用状态下，zookeeper的原子广播协议</p>
 <ul>
-<li><strong>降低资源消耗</strong>：通过重复利用已创建的线程降低线程创建和销毁造成的消耗。</li>
-<li><strong>提高响应速度</strong>：当任务到达时，可以不需要等待线程创建就能立即执行。</li>
-<li><strong>提高线程的可管理性</strong>：线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，监控和调优</li>
+<li>过半通过，都是由主写，从读</li>
+<li>两阶段提交，1，主通知从写log 2，正式写入</li>
 </ul>
-<p>ThreadPoolExecutor的构造方法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * corePoolSize:核心线程数量</span></span><br><span class="line"><span class="comment"> * maximumPoolSize：最大线程数量</span></span><br><span class="line"><span class="comment"> * keepAliveTime:线程空闲时存活时间</span></span><br><span class="line"><span class="comment"> * unit: 存活时间的单位</span></span><br><span class="line"><span class="comment"> * workQueue: 线程等待队列</span></span><br><span class="line"><span class="comment"> * threadFactory:线程创建工厂</span></span><br><span class="line"><span class="comment"> * handler：拒绝策略</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                          TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                          ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                          RejectedExecutionHandler handler)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (corePoolSize &lt; <span class="number">0</span> ||</span><br><span class="line">        maximumPoolSize &lt;= <span class="number">0</span> ||</span><br><span class="line">        maximumPoolSize &lt; corePoolSize ||</span><br><span class="line">        keepAliveTime &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">    <span class="keyword">if</span> (workQueue == <span class="keyword">null</span> || threadFactory == <span class="keyword">null</span> || handler == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="keyword">this</span>.corePoolSize = corePoolSize;</span><br><span class="line">    <span class="keyword">this</span>.maximumPoolSize = maximumPoolSize;</span><br><span class="line">    <span class="keyword">this</span>.workQueue = workQueue;</span><br><span class="line">    <span class="keyword">this</span>.keepAliveTime = unit.toNanos(keepAliveTime);</span><br><span class="line">    <span class="keyword">this</span>.threadFactory = threadFactory;</span><br><span class="line">    <span class="keyword">this</span>.handler = handler;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>jdk提供的几种常见的默认线程池</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;只有一个线程的线程池</span><br><span class="line">ExecutorService executorService &#x3D; Executors.newSingleThreadExecutor();</span><br><span class="line">&#x2F;&#x2F;来一个任务启动一个线程，新的任务来时，直接开启一个新的线程，没有等待队列</span><br><span class="line">ExecutorService executorService1 &#x3D; Executors.newCachedThreadPool();</span><br><span class="line">&#x2F;&#x2F;固定的线程数量，最大值&#x3D;核心线程</span><br><span class="line">ExecutorService executorService2 &#x3D; Executors.newFixedThreadPool(3);</span><br><span class="line">&#x2F;&#x2F;定时任务，指定隔一定时间的执行</span><br><span class="line">ExecutorService executorService3 &#x3D; Executors.newSingleThreadScheduledExecutor();</span><br></pre></td></tr></table></figure>
-
+<h4 id="zookeeper选主"><a href="#zookeeper选主" class="headerlink" title="zookeeper选主"></a>zookeeper选主</h4><p>每个节点都有自己的Myid，也有自己的事务id zxid<br>按照事务zxid最大选，事务id一样时，按照myid最大选主</p>
+<h3 id="watch（观察）"><a href="#watch（观察）" class="headerlink" title="watch（观察）"></a>watch（观察）</h3><p>同一视图，目录树结构</p>
+<ul>
+<li>节点的变化会产生事件（create,delete,change,children）</li>
+<li>watch的节点发生变化会通过callback发送事件（通过watch其它服务的session临时节点来判断该服务是否可用）</li>
+</ul>
+<h3 id="ZK分布式锁"><a href="#ZK分布式锁" class="headerlink" title="ZK分布式锁"></a>ZK分布式锁</h3><p>sequence +watch前一个</p>
 
       
 
@@ -311,7 +263,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">distributed</a>
         		</li>
       		
 		</ul>
@@ -367,7 +319,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2021/07/21/%E7%BA%BF%E7%A8%8B/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2021/08/22/ZooKeeper/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -381,18 +333,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2021/07/27/redis/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          redis
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/07/20/spring/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">spring</div>
+    <a href="/2021/08/12/MySQL/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MySQL</div>
       <i class="icon-circle-right"></i>
     </a>
   
