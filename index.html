@@ -203,30 +203,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>ZooKeeper是一个可扩展，可靠，保证顺序性的协调性服务</p>
-<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
-<li>高可用（来自于快速的恢复）</li>
-<li>主挂了后可以在200ms内恢复</li>
-<li>目录树结构</li>
-<li>由一主多从+observer组成，observer不参加选主</li>
-</ul>
-<h3 id="paxo"><a href="#paxo" class="headerlink" title="paxo"></a>paxo</h3><p>它是一个基于消息传递的一致性算法，被认为是唯一的分布式一致性算法</p>
-<ol>
-<li>集群中每个节点都有事件列表，每个事件都有一个事务编号，节点收到的事件id只有大于当前的事件id才可以开始投票事务</li>
-<li>集群中事件同意的节点大于总节点数量的一半，该事件才可以执行</li>
-</ol>
-<h3 id="ZAB协议"><a href="#ZAB协议" class="headerlink" title="ZAB协议"></a>ZAB协议</h3><p>作用在可用状态下，zookeeper的原子广播协议</p>
-<ul>
-<li>过半通过，都是由主写，从读</li>
-<li>两阶段提交，1，主通知从写log 2，正式写入</li>
-</ul>
-<h4 id="zookeeper选主"><a href="#zookeeper选主" class="headerlink" title="zookeeper选主"></a>zookeeper选主</h4><p>每个节点都有自己的Myid，也有自己的事务id zxid<br>按照事务zxid最大选，事务id一样时，按照myid最大选主</p>
-<h3 id="watch（观察）"><a href="#watch（观察）" class="headerlink" title="watch（观察）"></a>watch（观察）</h3><p>同一视图，目录树结构</p>
-<ul>
-<li>节点的变化会产生事件（create,delete,change,children）</li>
-<li>watch的节点发生变化会通过callback发送事件（通过watch其它服务的session临时节点来判断该服务是否可用）</li>
-</ul>
-<h3 id="ZK分布式锁"><a href="#ZK分布式锁" class="headerlink" title="ZK分布式锁"></a>ZK分布式锁</h3><p>sequence +watch前一个</p>
-
+        
+          <a class="article-more-a" href="/2021/08/22/ZooKeeper/#more">more >></a>
+        
       
 
       
@@ -1083,11 +1062,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">distributed</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">database</a>
+                <a href="javascript:void(0)" class="js-tag color2">distributed</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1095,11 +1074,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color4">git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">git</a>
+                <a href="javascript:void(0)" class="js-tag color4">database</a>
               </li>
             
             <div class="clearfix"></div>
